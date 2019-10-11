@@ -1,3 +1,6 @@
 *.exe
 *.o
 *~
+a.out
+.DS_Store
+small3d
