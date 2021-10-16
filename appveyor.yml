@@ -1,5 +1,8 @@
 environment:
   matrix:
+    - job_name: Ubuntu Linux builds
+      appveyor_build_worker_image: Ubuntu2004
+      
     - job_name: Windows MinGW builds
       appveyor_build_worker_image: Visual Studio 2015
         
@@ -9,10 +12,27 @@ environment:
     - job_name: MacOS builds
       appveyor_build_worker_image: macos-bigsur
 
-    - job_name: Ubuntu Linux builds
-      appveyor_build_worker_image: Ubuntu2004
-
 for:
+-
+  matrix:
+    only:
+      - job_name: Ubuntu Linux builds
+        
+  install:
+  - sudo apt-get update
+  - sudo apt-get -y install libasound2-dev
+
+  test_script:
+  - ./build-all.sh Debug 
+  - git clean -fdx
+  - rm -rf small3d
+  - ./build-all.sh Release 
+  - git clean -fdx
+  - rm -rf small3d
+  - ./build-all.sh Debug opengl
+  - git clean -fdx
+  - rm -rf small3d
+  - ./build-all.sh Release opengl
 -
   matrix:
     only:
@@ -64,22 +84,6 @@ for:
       - job_name: MacOS builds
         
   test_script:
-  - ./build-all.sh Debug opengl
-  - git clean -fdx
-  - rm -rf small3d
-  - ./build-all.sh Release opengl
--
-  matrix:
-    only:
-      - job_name: Ubuntu Linux builds
-  
-  test_script:
-  - ./build-all.sh Debug 
-  - git clean -fdx
-  - rm -rf small3d
-  - ./build-all.sh Release 
-  - git clean -fdx
-  - rm -rf small3d
   - ./build-all.sh Debug opengl
   - git clean -fdx
   - rm -rf small3d
