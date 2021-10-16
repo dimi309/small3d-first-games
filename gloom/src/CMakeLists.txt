@@ -67,6 +67,6 @@ if(MSVC)
     "${small3d_BINARY_DIR}/bin")
 endif()
 
-if(UNIX AND NOT APPLE)
-  target_link_libraries(gloom PUBLIC m pthread dl rt X11)
+if(UNIX AND NOT APPLE) # Linux
+  target_link_libraries(gloom PUBLIC m pthread rt asound X11 dl)
 endif()
