@@ -24,8 +24,13 @@ echo Please indicate build type: debug or release, followed by opengl if you wou
 endlocal & exit /b 1
 )
 
-echo Entering small3d directory (must have been copied here)...
-cd small3d\scripts
+git clone https://github.com/dimi309/small3d
+if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
+cd small3d
+if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
+git checkout tags/1.709
+if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
+cd scripts
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 call build-mingw %1 %2
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%

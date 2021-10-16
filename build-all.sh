@@ -9,8 +9,10 @@ if [ ! -z "$2" ] && [ "$2" != "opengl" ]; then
     exit 1
 fi
 
-echo "Entering small3d directory (must have been copied here)..."
-cd small3d/scripts
+git clone https://github.com/dimi309/small3d
+cd small3d
+git checkout tags/1.709
+cd scripts
 ./build.sh $1 $2
 cd ..
 cd ..
