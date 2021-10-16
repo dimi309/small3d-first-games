@@ -28,19 +28,15 @@ for:
   - del "C:\Program Files\Git\usr\bin\sh.exe"
   
   test_script:
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-mingw.bat Debug
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-mingw.bat Release
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-mingw.bat Debug opengl
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-mingw.bat Release opengl
 -
   matrix:
@@ -52,19 +48,15 @@ for:
   - refreshenv
   
   test_script:
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-vs.bat Debug
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-vs.bat Release
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-vs.bat Debug opengl
   - git clean -fdx
   - rmdir /Q /S small3d
-  - git clone https://github.com/dimi309/small3d
   - .\build-all-vs.bat Release opengl
 -
   matrix:
@@ -72,11 +64,9 @@ for:
       - job_name: MacOS builds
         
   test_script:
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Debug opengl
   - git clean -fdx
   - rm -rf small3d
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Release opengl
 -
   matrix:
@@ -84,19 +74,15 @@ for:
       - job_name: Ubuntu Linux builds
   
   test_script:
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Debug 
   - git clean -fdx
   - rm -rf small3d
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Release 
   - git clean -fdx
   - rm -rf small3d
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Debug opengl
   - git clean -fdx
   - rm -rf small3d
-  - git clone https://github.com/dimi309/small3d
   - ./build-all.sh Release opengl
 
 build: off
