@@ -33,7 +33,7 @@ Game::Game() {
 
   small3d::initLogger();
 
-  renderer = &small3d::Renderer::getInstance("Gloom", 1024, 768, 0.785f,
+  renderer = &small3d::Renderer::getInstance("Gloom", 0, 0, 0.785f,
     1.0f, 60.0f, "resources/shaders/", 240);
 
   map.load(getBasePath() + "resources/map.txt");
