@@ -40,13 +40,13 @@ else() # OpenGL
     )
 endif()
 
-if(UNIX OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND NOT
+if(UNIX OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND NOT
 	CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10))
   target_include_directories(srender PUBLIC
     ${BZIP2_INCLUDE_DIRS})
   target_link_libraries(srender PUBLIC
     ${BZIP2_LIBRARIES})
-endif(UNIX)
+endif()
 
 if(WIN32)
   target_link_libraries(srender PUBLIC winmm)

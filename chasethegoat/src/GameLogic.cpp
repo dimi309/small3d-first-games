@@ -13,7 +13,6 @@
 #define MIN_X -24.0f
 
 #define GROUND_Y -1.0f
-#define FULL_ROTATION 6.28f // More or less 360 degrees in radians
 
 #define BUG_TILT_SPEED 0.03f
 #define BUG_ROTATION_SPEED 0.06f
@@ -31,6 +30,10 @@
 
 
 using namespace small3d;
+
+float sgn(float val) {
+  return val < 0.0f ? -1.0f : 1.0f;
+}
 
 namespace ChaseTheGoat3D {
 
@@ -79,12 +82,11 @@ namespace ChaseTheGoat3D {
   void GameLogic::initGame() {
     goat.offset = glm::vec3(-1.2f, GROUND_Y, -4.0f);
     bug.offset = glm::vec3(3.6f, GROUND_Y + BUG_START_ALTITUDE, -5.0f);
-    bug.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-
+    bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    goat.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
     bug.startAnimating();
     goat.startAnimating();
-
 
     startSeconds = glfwGetTime();
 
@@ -93,17 +95,14 @@ namespace ChaseTheGoat3D {
   void GameLogic::moveGoat() {
     goatState = TURNING;
 
-    float xDistance = bug.offset.x - goat.offset.x;
-    float zDistance = bug.offset.z - goat.offset.z;
+    float xDistance = goat.offset.x - bug.offset.x;
+    float zDistance = goat.offset.z - bug.offset.z;
     float distance = sqrt(xDistance * xDistance + zDistance * zDistance);
 
     float goatRelX = xDistance / distance;
     float goatRelZ = zDistance / distance;
 
-    float goatDirectionX = sin(goat.rotation.y);
-    float goatDirectionZ = cos(goat.rotation.y);
-
-    float dotPosDir = goatRelX * goatDirectionX + goatRelZ * goatDirectionZ; // dot product
+    float dotPosDir = goatRelX * bug.getOrientation().x + goatRelZ * bug.getOrientation().z; // dot product
 
     if (dotPosDir > 0.98f) {
       goatState = TURNING;
@@ -112,7 +111,7 @@ namespace ChaseTheGoat3D {
       goatState = WALKING_STRAIGHT;
 
     if (goatState == TURNING) {
-      goat.rotation.y += GOAT_ROTATION_SPEED;
+      goat.rotate(glm::vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
 
     }
 
@@ -133,9 +132,9 @@ namespace ChaseTheGoat3D {
       goatState = TURNING;
     }
 
-    goat.offset.x -= sin(goat.rotation.y) * GOAT_SPEED;
-    goat.offset.z -= cos(goat.rotation.y) * GOAT_SPEED;
-    goat.offset.y += sin(goat.rotation.x) * GOAT_SPEED;
+    goat.offset.x += goat.getOrientation().x * GOAT_SPEED;
+    goat.offset.z += goat.getOrientation().z * GOAT_SPEED;
+    goat.offset.y += goat.getOrientation().y * GOAT_SPEED;
 
     goat.animate();
 
@@ -143,42 +142,29 @@ namespace ChaseTheGoat3D {
 
   void GameLogic::moveBug(const KeyInput& keyInput) {
 
+    auto bugRotation = bug.getRotationXYZ();
+
     if (keyInput.left) {
-      bug.rotation.y += BUG_ROTATION_SPEED;
-
-      if (bug.rotation.y > FULL_ROTATION)
-        bug.rotation.y = 0.0f;
-
-
+      bugRotation.y += BUG_ROTATION_SPEED;
     }
     else if (keyInput.right) {
-      bug.rotation.y -= BUG_ROTATION_SPEED;
-
-      if (bug.rotation.y < -FULL_ROTATION)
-        bug.rotation.y = 0.0f;
+      bugRotation.y -= BUG_ROTATION_SPEED;
     }
 
     if (keyInput.down) {
-
-      bug.rotation.x += BUG_TILT_SPEED;
-
-      if (bug.rotation.x > 0.75f)
-        bug.rotation.x = 0.75f;
-
+      bugRotation.x += BUG_TILT_SPEED;
 
     }
     else if (keyInput.up) {
-
-      bug.rotation.x -= BUG_TILT_SPEED;
-
-      if (bug.rotation.x < -0.75f)
-        bug.rotation.x = -0.75f;
+      bugRotation.x -= BUG_TILT_SPEED;
     }
 
+    bug.setRotation(bugRotation);
+
     if (keyInput.space) {
-      bug.offset.x -= sin(bug.rotation.y) * BUG_SPEED;
-      bug.offset.z -= cos(bug.rotation.y) * BUG_SPEED;
-      bug.offset.y += sin(bug.rotation.x) * BUG_SPEED;
+      bug.offset.x += bug.getOrientation().x * BUG_SPEED;
+      bug.offset.z += bug.getOrientation().z * BUG_SPEED;
+      bug.offset.y += bug.getOrientation().y * BUG_SPEED;
     }
 
     if (bug.offset.y < GROUND_Y + 0.5f)
@@ -196,10 +182,10 @@ namespace ChaseTheGoat3D {
 
     // Bug chase camera
     renderer->cameraPosition = bug.offset;
-    renderer->cameraPosition.x += sin(bug.rotation.y) * 1.7f;
-    renderer->cameraPosition.z += cos(bug.rotation.y) * 1.7f;
-    renderer->cameraPosition.y -= sin(bug.rotation.x) * 1.7f;
-    renderer->cameraRotation = bug.rotation;
+    renderer->cameraPosition.x -= bug.getOrientation().x * 1.7f;
+    renderer->cameraPosition.z -= bug.getOrientation().z * 1.7f;
+    renderer->cameraPosition.y -= bug.getOrientation().y * 1.7f;
+    renderer->setCameraRotation(bug.getRotation());
     if (renderer->cameraPosition.y < GROUND_Y + 1.0f)
       renderer->cameraPosition.y = GROUND_Y + 1.0f;
 

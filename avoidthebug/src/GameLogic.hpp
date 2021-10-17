@@ -32,7 +32,7 @@ namespace AvoidTheBug3D {
   private:
 
     SceneObject goat, bug, tree;
-    
+
     Sound bahSound;
 
     enum GameState {
@@ -45,7 +45,6 @@ namespace AvoidTheBug3D {
     };
     BugState bugState, bugPreviousState;
     int bugFramesInCurrentState;
-    float bugVerticalSpeed;
 
     Model skyRect, groundRect, msgRect, startScreenRect;
 

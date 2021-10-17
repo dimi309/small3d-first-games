@@ -113,10 +113,10 @@ private:
         frog.startJumping();
       }
 
-      if (upkey) frog.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-      if (downkey) frog.rotation = glm::vec3(0.0f, 3.14f, 0.0f);
-      if (rightkey) frog.rotation = glm::vec3(0.0f, -1.57f, 0.0f);
-      if (leftkey) frog.rotation = glm::vec3(0.0f, 1.57f, 0.0f);
+      if (upkey) frog.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+      if (downkey) frog.setRotation(glm::vec3(0.0f, 3.14f, 0.0f));
+      if (rightkey) frog.setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
+      if (leftkey) frog.setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
 
       if (esckey) {
         gameState = MENU;
@@ -127,7 +127,7 @@ private:
       if (enterkey) {
         gameState = PLAYING;
         frog.offset = glm::vec3(0.0f, GROUND_Y, -4.0f);
-        frog.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+        frog.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
       }
 
       if (esckey && timeInMainMenu > 1) quitting = true;
@@ -154,23 +154,23 @@ private:
     glfwSetKeyCallback(window, keyCallback);
 
     plank[0].offset = glm::vec3(0.0f, -1.02f, -16.0f);
-    plank[0].rotation = glm::vec3(0.0f, 1.57f, 0.0f);
+    plank[0].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[0].speed = 0.2f;
 
     plank[1].offset = glm::vec3(0.0f, -1.02f, -17.0f);
-    plank[1].rotation = glm::vec3(0.0f, 1.57f, 0.0f);
+    plank[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[1].speed = 0.1f;
 
     plank[2].offset = glm::vec3(0.0f, -1.02f, -18.0f);
-    plank[2].rotation = glm::vec3(0.0f, 1.57f, 0.0f);
+    plank[2].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[2].speed = 0.15f;
 
     car[0].offset = glm::vec3(0.0f, -0.5f, -7.5f);
-    car[0].rotation = glm::vec3(0.0f, -1.57f, 0.0f);
+    car[0].setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
     car[0].speed = -0.35f;
 
     car[1].offset = glm::vec3(5.0f, -0.5f, -9.5f);
-    car[1].rotation = glm::vec3(0.0f, 1.57f, 0.0f);
+    car[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     car[1].speed = 0.75f;
 
     renderer->createRectangle(skyRect, glm::vec3(-1.0f, 1.0f, 1.0f),
@@ -205,7 +205,7 @@ private:
     else car[1].offset.x = MIN_X;
 
     if (car[0].containsCorners(frog) || car[1].containsCorners(frog)) {
-      frog.rotation.x = -1.57f;
+      frog.setRotation(glm::vec3(-1.57f, 0.0f, 0.0f));
       gameState = CRUSHED;
       ++losses;
       updateScoreMessage();
@@ -261,7 +261,7 @@ private:
     renderer->cameraPosition.y += 13.0f;
 
     // ... and look down.
-    renderer->cameraRotation.x = -1.0f;
+    renderer->setCameraRotation(glm::vec3(-1.0f, 0.0f, 0.0f));
 
     // Limit left and right position while following the frog.
     if (renderer->cameraPosition.x < MIN_CAM_X) renderer->cameraPosition.x =

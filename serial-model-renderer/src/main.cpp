@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
       {
         names = GlbFile(entry.path().string()).getMeshNames();
       }
-      catch (std::runtime_error& e) {
+      catch (std::runtime_error& ) {
         names.push_back("");
       }
 
@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
           for (auto& ob : objects) {
 
             ob.so->animate();
-            ob.so->rotation.y += 0.02f;
+            ob.so->rotate(glm::vec3(0.0f, 0.02f, 0.0f));
 
             ob.textureName != "" ?
               renderer->render(*ob.so, ob.textureName) :

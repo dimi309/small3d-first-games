@@ -16,9 +16,6 @@ The rest of the games can be built by executing:
 	- `build-all-mingw.bat` for a MinGW gcc build on Windows 
 	- `build-all-vs.bat` for a Visual Studio (2019) build on Windows
 	- `build-all.sh` for gcc/llvm builds on MacOS and Linux
-	
-Version 1.709 of small3d will be downloaded by the abovementioned scripts, which is the version
-required by these samples. There are breaking changes in small3d after that.
 
 ## Prerequisites:
 
