@@ -11,7 +11,6 @@ fi
 
 git clone https://github.com/dimi309/small3d
 cd small3d
-git checkout tags/1.709
 cd scripts
 ./build.sh $1 $2
 cd ..

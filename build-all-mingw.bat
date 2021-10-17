@@ -28,8 +28,6 @@ git clone https://github.com/dimi309/small3d
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd small3d
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
-git checkout tags/1.709
-if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd scripts
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 call build-mingw %1 %2
