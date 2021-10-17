@@ -40,7 +40,7 @@ else() # OpenGL
     )
 endif()
 
-if(UNIX OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND NOT
+if(UNIX OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND NOT
 	CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10))
   target_include_directories(chasethegoat3d PUBLIC ${BZIP2_INCLUDE_DIRS})
   target_link_libraries(chasethegoat3d PUBLIC ${BZIP2_LIBRARIES})
