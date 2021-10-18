@@ -10,7 +10,6 @@
 #define MIN_Z -24.0f
 
 #define GROUND_Y -1.0f
-#define FULL_ROTATION 6.28f // More or less 360 degrees in radians
 
 #define BUG_ROTATION_SPEED 0.12f
 #define BUG_DIVE_TILT -0.8f
@@ -19,7 +18,6 @@
 #define BUG_START_DIVE_DISTANCE 0.6f
 #define BUG_FLIGHT_HEIGHT 1.4f
 
-#define GOAT_ROTATION_SPEED 0.1f
 #define GOAT_SPEED 0.05f
 
 #define RESULT_TEXT_NAME "resutlText"
@@ -28,9 +26,13 @@
 #include <stdexcept>
 #include <cmath>
 #include "include/GameLogic.hpp"
-#include <sys/time.h>
+#include <ctime>
 
 using namespace small3d;
+
+float sgn(float val) {
+    return val < 0.0f ? -1.0f : 1.0f;
+}
 
 namespace AvoidTheBug3D {
 
@@ -73,7 +75,7 @@ namespace AvoidTheBug3D {
         bugVerticalSpeed = BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION;
 
         tree.offset = glm::vec3(2.6f, GROUND_Y, -8.0f);
-        tree.rotation = glm::vec3(0.0f, 0.5f, 0.0f);
+        tree.setRotation(glm::vec3(0.0f, 0.5f, 0.0f));
 
         gameState = START_SCREEN;
         endSeconds = currentTimeInSeconds();
@@ -107,7 +109,7 @@ namespace AvoidTheBug3D {
             goat.startAnimating();
 
             if (keyInput.up) {
-                goat.rotation.y = 0.785f;
+                goat.setRotation(glm::vec3(0.0f, 0.785f, 0.0f));
                 goat.offset.z -= GOAT_SPEED / 2;
                 goat.offset.x -= GOAT_SPEED / 2;
 
@@ -117,7 +119,7 @@ namespace AvoidTheBug3D {
                 }
 
             } else if (keyInput.down) {
-                goat.rotation.y = 2.355f;
+                goat.setRotation(glm::vec3(0.0f, 2.355f, 0.0f));
                 goat.offset.z += GOAT_SPEED / 2;
                 goat.offset.x -= GOAT_SPEED / 2;
 
@@ -139,7 +141,7 @@ namespace AvoidTheBug3D {
             goat.startAnimating();
 
             if (keyInput.up) {
-                goat.rotation.y = -0.785f;
+                goat.setRotation(glm::vec3(0.0f, -0.785f, 0.0f));
                 goat.offset.z -= GOAT_SPEED / 2;
                 goat.offset.x += GOAT_SPEED / 2;
 
@@ -150,7 +152,7 @@ namespace AvoidTheBug3D {
 
 
             } else if (keyInput.down) {
-                goat.rotation.y = -2.355f;
+                goat.setRotation(glm::vec3(0.0f, -2.355f, 0.0f));
                 goat.offset.z += GOAT_SPEED / 2;
                 goat.offset.x += GOAT_SPEED / 2;
 
@@ -186,17 +188,14 @@ namespace AvoidTheBug3D {
 
     void GameLogic::moveBug() {
 
-        float xDistance = bug.offset.x - goat.offset.x;
-        float zDistance = bug.offset.z - goat.offset.z;
+        float xDistance = goat.offset.x - bug.offset.x;
+        float zDistance = goat.offset.z - bug.offset.z;
         float distance = sqrt(xDistance * xDistance + zDistance * zDistance);
 
         float goatRelX = xDistance / distance;
         float goatRelZ = zDistance / distance;
 
-        float bugDirectionX = sin(bug.rotation.y);
-        float bugDirectionZ = cos(bug.rotation.y);
-
-        float dotPosDir = goatRelX * bugDirectionX + goatRelZ * bugDirectionZ; // dot product
+        float dotPosDir = goatRelX * bug.getOrientation().x + goatRelZ * bug.getOrientation().z; // dot product
 
         // Bug state: decide
         if (bugState == bugPreviousState) {
@@ -212,67 +211,51 @@ namespace AvoidTheBug3D {
                 bahSound.play();
                 seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
                 gameState = START_SCREEN;
-                endSeconds = currentTimeInSeconds();
-                renderer->generateTexture(RESULT_TEXT_NAME,
-                                          "Goat not bitten for " + std::to_string(seconds) +
-                                          " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
+                renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
+                                                            " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
             }
 
             if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
                 bugState = DIVING_UP;
+                bug.rotate(glm::vec3(2 * sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
             }
         } else if (bugState == DIVING_UP) {
             if (goat.contains(bug.offset)) {
                 bahSound.play();
                 seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
                 gameState = START_SCREEN;
-                endSeconds = currentTimeInSeconds();
-                renderer->generateTexture(RESULT_TEXT_NAME,
-                                          "Goat not bitten for " + std::to_string(seconds) +
-                                          " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
+                renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
+                                                            " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
             }
 
             if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
                 bugState = FLYING_STRAIGHT;
-                bug.offset.y =
-                        GROUND_Y + BUG_FLIGHT_HEIGHT; // Correction of possible rounding errors
+                bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
             }
         } else {
 
             if (distance > BUG_START_DIVE_DISTANCE) {
-                if (dotPosDir < 0.98f) {
+                if (dotPosDir < 0.9f) {
                     bugState = TURNING;
                 } else {
                     bugState = FLYING_STRAIGHT;
                 }
             } else {
                 bugState = DIVING_DOWN;
+                bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
             }
-
+            bug.animate();
         }
 
         // Bug state: represent
 
-        bug.rotation.x = 0;
-
         if (bugState == TURNING) {
-
-            bug.rotation.y += BUG_ROTATION_SPEED;
-
-        } else if (bugState == DIVING_DOWN) {
-            bug.rotation.x = BUG_DIVE_TILT;
-            bug.offset.y -= bugVerticalSpeed;
-        } else if (bugState == DIVING_UP) {
-            bug.rotation.x = - BUG_DIVE_TILT;
-            bug.offset.y += bugVerticalSpeed;
+            bug.rotate(glm::vec3(0.0f, BUG_ROTATION_SPEED, 0.0f));
         }
 
-        if (bug.rotation.y > FULL_ROTATION)
-            bug.rotation.y = 0.0f;
-
-
-        bug.offset.x -= sin(bug.rotation.y) * BUG_SPEED;
-        bug.offset.z -= cos(bug.rotation.y) * BUG_SPEED;
+        bug.offset.x += bug.getOrientation().x * BUG_SPEED;
+        bug.offset.z += bug.getOrientation().z * BUG_SPEED;
+        bug.offset.y += bug.getOrientation().y * BUG_SPEED;
 
         if (bug.offset.z < MIN_Z)
             bug.offset.z = MIN_Z;
@@ -284,7 +267,6 @@ namespace AvoidTheBug3D {
         if (bug.offset.x > -(bug.offset.z))
             bug.offset.x = -(bug.offset.z);
 
-        bug.animate();
     }
 
     void GameLogic::processGame(const KeyInput &keyInput) {
@@ -309,7 +291,6 @@ namespace AvoidTheBug3D {
                 break;
             default:
                 throw std::runtime_error("Unrecognised game state");
-                break;
         }
     }
 
