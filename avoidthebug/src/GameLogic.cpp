@@ -30,10 +30,6 @@
 
 using namespace small3d;
 
-float sgn(float val) {
-  return val < 0.0f ? -1.0f : 1.0f;
-}
-
 namespace AvoidTheBug3D {
   
   GameLogic::GameLogic() :
@@ -185,7 +181,7 @@ namespace AvoidTheBug3D {
       
       if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
         bugState = DIVING_UP;
-        bug.rotate(glm::vec3(2 * sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(glm::vec3(-2 * BUG_DIVE_TILT, 0.0f, 0.0f));
       }
     } else if (bugState == DIVING_UP) {
       if (goat.contains(bug.offset)) {
@@ -198,7 +194,7 @@ namespace AvoidTheBug3D {
       
       if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
         bugState = FLYING_STRAIGHT;
-        bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
       }
     } else {
       
@@ -210,7 +206,7 @@ namespace AvoidTheBug3D {
         }
       } else {
         bugState = DIVING_DOWN;
-        bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
       }
       bug.animate();
     }
