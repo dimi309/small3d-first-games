@@ -208,6 +208,7 @@ namespace AvoidTheBug3D {
                 bahSound.play();
                 seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
                 gameState = START_SCREEN;
+                endSeconds = currentTimeInSeconds();
                 renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
                                                             " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
             }
@@ -221,6 +222,7 @@ namespace AvoidTheBug3D {
                 bahSound.play();
                 seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
                 gameState = START_SCREEN;
+                endSeconds = currentTimeInSeconds();
                 renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
                                                             " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
             }
