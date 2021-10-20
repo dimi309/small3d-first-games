@@ -33,11 +33,6 @@
 
 using namespace small3d;
 
-float sgn(float val) {
-    return val < 0.0f ? -1.0f : 1.0f;
-}
-
-
 namespace AvoidTheBug3D {
 
 double GameLogic::currentTimeInSeconds() {
@@ -96,6 +91,7 @@ GameLogic::~GameLogic() {
 void GameLogic::initGame() {
     goat.offset = glm::vec3(-1.2f, GROUND_Y, -4.0f);
     bug.offset = glm::vec3(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
+    bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
     
     bug.startAnimating();
     
@@ -214,26 +210,28 @@ void GameLogic::moveBug() {
             bahSound.play();
             seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
             gameState = START_SCREEN;
+            endSeconds = currentTimeInSeconds();
             renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
                                       " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
         }
         
         if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
             bugState = DIVING_UP;
-            bug.rotate(glm::vec3(2 * sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+            bug.rotate(glm::vec3(-2 * BUG_DIVE_TILT, 0.0f, 0.0f));
         }
     } else if (bugState == DIVING_UP) {
         if (goat.contains(bug.offset)) {
             bahSound.play();
             seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
             gameState = START_SCREEN;
+            endSeconds = currentTimeInSeconds();
             renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
                                       " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
         }
         
         if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
             bugState = FLYING_STRAIGHT;
-            bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+            bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
         }
     } else {
         
@@ -245,7 +243,7 @@ void GameLogic::moveBug() {
             }
         } else {
             bugState = DIVING_DOWN;
-            bug.rotate(glm::vec3(-sgn(bug.getOrientation().z) * BUG_DIVE_TILT, 0.0f, 0.0f));
+            bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
         }
         bug.animate();
     }
