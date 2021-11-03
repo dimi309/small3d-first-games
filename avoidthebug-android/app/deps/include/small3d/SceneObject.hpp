@@ -48,7 +48,8 @@ namespace small3d
     glm::mat4x4 rotation = glm::mat4x4(1);
     glm::vec3 rotationXYZ = glm::vec3(0.0f);
     bool rotationByMatrix = false;
-    std::vector<Model> models;
+    std::shared_ptr<std::vector<Model>> models = std::shared_ptr<std::vector<Model>>(new std::vector<Model>());
+    std::shared_ptr<BoundingBoxSet> boundingBoxSet = std::shared_ptr<BoundingBoxSet>(new BoundingBoxSet());
   public:
 
     /**
@@ -63,7 +64,7 @@ namespace small3d
      *                        bounding box, getting more accurate collision detection
      *                        at the expense of performance.
      */
-    SceneObject(const std::string name, const std::string modelPath,
+    SceneObject(const std::string& name, const std::string& modelPath,
       const std::string& modelMeshName, const uint32_t boundingBoxSubdivisions = 0);
 
     /**
@@ -102,7 +103,7 @@ namespace small3d
      *                        bounding box, getting more accurate collision detection
      *                        at the expense of performance.
      */
-    SceneObject(const std::string name, const std::string modelPath,
+    SceneObject(const std::string& name, const std::string& modelPath,
       const int numFrames = 1, const int startFrameIndex = 1, 
       const uint32_t boundingBoxSubdivisions = 0);
 
@@ -117,6 +118,19 @@ namespace small3d
      */
     Model& getModel();
 
+
+    /**
+     * @brief Get the bounding box set as models (for debug-rendering)
+     * @return The bounding box set models
+     */
+    std::vector<Model> getBoundingBoxSetModels();
+
+    /**
+     * @brief Get the bounding box set extremes (min and max coords)
+     * @return The bounding box set extremes
+     */
+    std::vector<BoundingBoxSet::extremes> getBoundingBoxSetExtremes();
+
     /**
      * @brief Get the name of the object
      * @return The name of the object
@@ -124,10 +138,9 @@ namespace small3d
     const std::string getName() const;
 
     /**
-     * Offset (position) of the object
+     * Position of the object
      */
-    glm::vec3 offset = glm::vec3(0.0f, 0.0f, 0.0f);
-
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
     
     /**
      * @brief: Set the rotation of the object 
@@ -141,7 +154,7 @@ namespace small3d
      *
      * @param rotation The rotation to modify by (x, y, z)
      */
-    void rotate(const glm::vec3 & rotation);
+    void rotate(const glm::vec3& rotation);
 
     /**
      * @brief: Set the rotation of the object
@@ -167,11 +180,11 @@ namespace small3d
     const glm::mat4x4 getRotation() const;
 
     /**
-     * @brief: Get the rotation of the object in axis-angle representation.
+     * @brief: Get the rotation of the object in x, y, z representation.
      *         This will NOT work if the rotation was set via the
      *         setRotation(mat4x4) function.
      *
-     * @return The rotation in axis-angle representation
+     * @return The rotation in x, y, z representation
      */
     const glm::vec3 getRotationXYZ() const;
 
@@ -203,11 +216,6 @@ namespace small3d
     void animate();
 
     /**
-     * @brief The bounding boxes for the object, used for collision detection.
-     */
-    BoundingBoxSet boundingBoxSet;
-
-    /**
      * @brief  Check if the bounding boxes of this object contain
      *         a given point.
      * @param  point The point
@@ -215,7 +223,7 @@ namespace small3d
      *         of the object, False otherwise.
      */
 
-    bool contains(const glm::vec3 point) const;
+    bool contains(const glm::vec3& point) const;
 
     /**
      *
@@ -227,7 +235,7 @@ namespace small3d
      *         False otherwise.
      */
 
-    bool containsCorners(SceneObject otherObject) const;
+    bool containsCorners(const SceneObject& otherObject) const;
 
     friend class Renderer;
 
