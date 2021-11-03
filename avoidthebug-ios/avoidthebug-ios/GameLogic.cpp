@@ -74,7 +74,7 @@ bahSound("resources1/sounds/bah.ogg"){
     bug.setFrameDelay(2);
     bugVerticalSpeed = BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION;
     
-    tree.offset = glm::vec3(2.6f, GROUND_Y, -8.0f);
+    tree.position = glm::vec3(2.6f, GROUND_Y, -8.0f);
     tree.setRotation(glm::vec3(0.0f, 0.5f, 0.0f));
     gameState = START_SCREEN;
     endSeconds = currentTimeInSeconds();
@@ -89,8 +89,8 @@ GameLogic::~GameLogic() {
 }
 
 void GameLogic::initGame() {
-    goat.offset = glm::vec3(-1.2f, GROUND_Y, -4.0f);
-    bug.offset = glm::vec3(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
+    goat.position = glm::vec3(-1.2f, GROUND_Y, -4.0f);
+    bug.position = glm::vec3(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
     bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
     
     bug.startAnimating();
@@ -110,29 +110,29 @@ void GameLogic::moveGoat(const KeyInput &keyInput) {
         
         if (keyInput.up) {
             goat.setRotation(glm::vec3(0.0f, 0.785f, 0.0f));
-            goat.offset.z -= GOAT_SPEED / 2;
-            goat.offset.x -= GOAT_SPEED / 2;
+            goat.position.z -= GOAT_SPEED / 2;
+            goat.position.x -= GOAT_SPEED / 2;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.z += GOAT_SPEED / 2;
-                goat.offset.x += GOAT_SPEED / 2;
+                goat.position.z += GOAT_SPEED / 2;
+                goat.position.x += GOAT_SPEED / 2;
             }
             
         } else if (keyInput.down) {
             goat.setRotation(glm::vec3(0.0f, 2.355f, 0.0f));
-            goat.offset.z += GOAT_SPEED / 2;
-            goat.offset.x -= GOAT_SPEED / 2;
+            goat.position.z += GOAT_SPEED / 2;
+            goat.position.x -= GOAT_SPEED / 2;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.z -= GOAT_SPEED / 2;
-                goat.offset.x += GOAT_SPEED / 2;
+                goat.position.z -= GOAT_SPEED / 2;
+                goat.position.x += GOAT_SPEED / 2;
             }
             
         } else {
-            goat.offset.x -= GOAT_SPEED;
+            goat.position.x -= GOAT_SPEED;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.x += GOAT_SPEED / 2;
+                goat.position.x += GOAT_SPEED / 2;
             }
             
         }
@@ -142,53 +142,53 @@ void GameLogic::moveGoat(const KeyInput &keyInput) {
         
         if (keyInput.up) {
             goat.setRotation(glm::vec3(0.0f, -0.785f, 0.0f));
-            goat.offset.z -= GOAT_SPEED / 2;
-            goat.offset.x += GOAT_SPEED / 2;
+            goat.position.z -= GOAT_SPEED / 2;
+            goat.position.x += GOAT_SPEED / 2;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.z += GOAT_SPEED / 2;
-                goat.offset.x -= GOAT_SPEED / 2;
+                goat.position.z += GOAT_SPEED / 2;
+                goat.position.x -= GOAT_SPEED / 2;
             }
             
             
         } else if (keyInput.down) {
             goat.setRotation(glm::vec3(0.0f, -2.355f, 0.0f));
-            goat.offset.z += GOAT_SPEED / 2;
-            goat.offset.x += GOAT_SPEED / 2;
+            goat.position.z += GOAT_SPEED / 2;
+            goat.position.x += GOAT_SPEED / 2;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.z -= GOAT_SPEED / 2;
-                goat.offset.x -= GOAT_SPEED / 2;
+                goat.position.z -= GOAT_SPEED / 2;
+                goat.position.x -= GOAT_SPEED / 2;
             }
             
         } else {
-            goat.offset.x += GOAT_SPEED;
+            goat.position.x += GOAT_SPEED;
             
             while (tree.containsCorners(goat)) {
-                goat.offset.x -= GOAT_SPEED / 2;
+                goat.position.x -= GOAT_SPEED / 2;
             }
             
         }
         
     }
     
-    if (goat.offset.z < MIN_Z + 1.0f)
-        goat.offset.z = MIN_Z + 1.0f;
-    if (goat.offset.z > MAX_Z - 1.0f)
-        goat.offset.z = MAX_Z - 1.0f;
+    if (goat.position.z < MIN_Z + 1.0f)
+        goat.position.z = MIN_Z + 1.0f;
+    if (goat.position.z > MAX_Z - 1.0f)
+        goat.position.z = MAX_Z - 1.0f;
     
-    if (goat.offset.x < goat.offset.z)
-        goat.offset.x = goat.offset.z;
-    if (goat.offset.x > -(goat.offset.z))
-        goat.offset.x = -(goat.offset.z);
+    if (goat.position.x < goat.position.z)
+        goat.position.x = goat.position.z;
+    if (goat.position.x > -(goat.position.z))
+        goat.position.x = -(goat.position.z);
     
     goat.animate();
     
 }
 
 void GameLogic::moveBug() {
-    float xDistance = goat.offset.x - bug.offset.x;
-    float zDistance = goat.offset.z - bug.offset.z;
+    float xDistance = goat.position.x - bug.position.x;
+    float zDistance = goat.position.z - bug.position.z;
     float distance = sqrt(xDistance * xDistance + zDistance * zDistance);
     
     float goatRelX = xDistance / distance;
@@ -206,7 +206,7 @@ void GameLogic::moveBug() {
     bugPreviousState = bugState;
     
     if (bugState == DIVING_DOWN) {
-        if (goat.contains(bug.offset)) {
+        if (goat.contains(bug.position)) {
             bahSound.play();
             seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
             gameState = START_SCREEN;
@@ -220,7 +220,7 @@ void GameLogic::moveBug() {
             bug.rotate(glm::vec3(-2 * BUG_DIVE_TILT, 0.0f, 0.0f));
         }
     } else if (bugState == DIVING_UP) {
-        if (goat.contains(bug.offset)) {
+        if (goat.contains(bug.position)) {
             bahSound.play();
             seconds = static_cast<int>(currentTimeInSeconds() - startSeconds);
             gameState = START_SCREEN;
@@ -254,19 +254,19 @@ void GameLogic::moveBug() {
         bug.rotate(glm::vec3(0.0f, BUG_ROTATION_SPEED, 0.0f));
     }
     
-    bug.offset.x += bug.getOrientation().x * BUG_SPEED;
-    bug.offset.z += bug.getOrientation().z * BUG_SPEED;
-    bug.offset.y += bug.getOrientation().y * BUG_SPEED;
+    bug.position.x += bug.getOrientation().x * BUG_SPEED;
+    bug.position.z += bug.getOrientation().z * BUG_SPEED;
+    bug.position.y += bug.getOrientation().y * BUG_SPEED;
     
-    if (bug.offset.z < MIN_Z)
-        bug.offset.z = MIN_Z;
-    if (bug.offset.z > MAX_Z)
-        bug.offset.z = MAX_Z;
+    if (bug.position.z < MIN_Z)
+        bug.position.z = MIN_Z;
+    if (bug.position.z > MAX_Z)
+        bug.position.z = MAX_Z;
     
-    if (bug.offset.x < bug.offset.z)
-        bug.offset.x = bug.offset.z;
-    if (bug.offset.x > -(bug.offset.z))
-        bug.offset.x = -(bug.offset.z);
+    if (bug.position.x < bug.position.z)
+        bug.position.x = bug.position.z;
+    if (bug.position.x > -(bug.position.z))
+        bug.position.x = -(bug.position.z);
     
 }
 
