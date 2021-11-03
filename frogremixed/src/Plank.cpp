@@ -26,5 +26,5 @@ void Plank::render(Renderer *renderer) {
 }
 
 void Plank::move() {
-  this->offset.x += this->speed;
+  this->position.x += this->speed;
 }

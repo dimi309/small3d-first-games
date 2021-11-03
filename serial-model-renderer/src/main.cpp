@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
           ob.textureName = name;
         }
 
-        if (ob.so->boundingBoxSet.boxExtremes[0].minX < minX) minX = ob.so->boundingBoxSet.boxExtremes[0].minX;
-        if (ob.so->boundingBoxSet.boxExtremes[0].maxX > maxX) maxX = ob.so->boundingBoxSet.boxExtremes[0].maxX;
+        if (ob.so->getBoundingBoxSetExtremes()[0].minX < minX) minX = ob.so->getBoundingBoxSetExtremes()[0].minX;
+        if (ob.so->getBoundingBoxSetExtremes()[0].maxX > maxX) maxX = ob.so->getBoundingBoxSetExtremes()[0].maxX;
 
         objects.push_back(ob);
 
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 
       for (auto& ob : objects) {
         ob.so->getModel().scale = glm::vec3(scale);
-        ob.so->offset = glm::vec3(0.0f, 0.0f, -5.0f);
+        ob.so->position = glm::vec3(0.0f, 0.0f, -5.0f);
         ob.so->startAnimating();
       }
 

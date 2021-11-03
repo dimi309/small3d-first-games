@@ -97,14 +97,14 @@ private:
   void processInput() {
 
     if (gameState == PLAYING) {
-      if (upkey && frog.offset.z > MIN_Z)
-        frog.offset.z -= 0.1f;
-      if (downkey && frog.offset.z < MAX_Z)
-        frog.offset.z += 0.1f;
-      if (leftkey && frog.offset.x > MIN_X)
-        frog.offset.x -= 0.1f;
-      if (rightkey && frog.offset.x < MAX_X)
-        frog.offset.x += 0.1f;
+      if (upkey && frog.position.z > MIN_Z)
+        frog.position.z -= 0.1f;
+      if (downkey && frog.position.z < MAX_Z)
+        frog.position.z += 0.1f;
+      if (leftkey && frog.position.x > MIN_X)
+        frog.position.x -= 0.1f;
+      if (rightkey && frog.position.x < MAX_X)
+        frog.position.x += 0.1f;
 
       if (!(upkey || downkey || leftkey || rightkey) && frog.isJumping()) {
         frog.stopJumping();
@@ -126,7 +126,7 @@ private:
     else if (gameState == MENU) {
       if (enterkey) {
         gameState = PLAYING;
-        frog.offset = glm::vec3(0.0f, GROUND_Y, -4.0f);
+        frog.position = glm::vec3(0.0f, GROUND_Y, -4.0f);
         frog.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
       }
 
@@ -153,23 +153,23 @@ private:
 
     glfwSetKeyCallback(window, keyCallback);
 
-    plank[0].offset = glm::vec3(0.0f, -1.02f, -16.0f);
+    plank[0].position = glm::vec3(0.0f, -1.02f, -16.0f);
     plank[0].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[0].speed = 0.2f;
 
-    plank[1].offset = glm::vec3(0.0f, -1.02f, -17.0f);
+    plank[1].position = glm::vec3(0.0f, -1.02f, -17.0f);
     plank[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[1].speed = 0.1f;
 
-    plank[2].offset = glm::vec3(0.0f, -1.02f, -18.0f);
+    plank[2].position = glm::vec3(0.0f, -1.02f, -18.0f);
     plank[2].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     plank[2].speed = 0.15f;
 
-    car[0].offset = glm::vec3(0.0f, -0.5f, -7.5f);
+    car[0].position = glm::vec3(0.0f, -0.5f, -7.5f);
     car[0].setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
     car[0].speed = -0.35f;
 
-    car[1].offset = glm::vec3(5.0f, -0.5f, -9.5f);
+    car[1].position = glm::vec3(5.0f, -0.5f, -9.5f);
     car[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
     car[1].speed = 0.75f;
 
@@ -198,11 +198,11 @@ private:
   }
 
   void processWorld() {
-    if (car[0].offset.x > MIN_X)  car[0].move();
-    else car[0].offset.x = MAX_X;
+    if (car[0].position.x > MIN_X)  car[0].move();
+    else car[0].position.x = MAX_X;
 
-    if (car[1].offset.x < MAX_X) car[1].move();
-    else car[1].offset.x = MIN_X;
+    if (car[1].position.x < MAX_X) car[1].move();
+    else car[1].position.x = MIN_X;
 
     if (car[0].containsCorners(frog) || car[1].containsCorners(frog)) {
       frog.setRotation(glm::vec3(-1.57f, 0.0f, 0.0f));
@@ -213,11 +213,11 @@ private:
       carSound->play();
     }
 
-    if (frog.offset.z < -15.5f && frog.offset.z > -18.5f &&
+    if (frog.position.z < -15.5f && frog.position.z > -18.5f &&
       !plank[0].containsCorners(frog) &&
       !plank[1].containsCorners(frog) &&
       !plank[2].containsCorners(frog)) {
-      frog.offset.y = GROUND_Y - 1.0f;
+      frog.position.y = GROUND_Y - 1.0f;
       gameState = DROWNED;
       ++losses;
       updateScoreMessage();
@@ -225,10 +225,10 @@ private:
       pondSound->play();
     }
     else {
-      frog.offset.y = GROUND_Y;
+      frog.position.y = GROUND_Y;
     }
 
-    if (frog.offset.z < -20.0f) {
+    if (frog.position.z < -20.0f) {
       gameState = WON;
       ++wins;
       updateScoreMessage();
@@ -237,7 +237,7 @@ private:
     }
 
     for (uint32_t idx = 0; idx < 3; ++idx) {
-      if (plank[idx].offset.x > MAX_X || plank[idx].offset.x < MIN_X)
+      if (plank[idx].position.x > MAX_X || plank[idx].position.x < MIN_X)
         plank[idx].speed = -plank[idx].speed;
     }
 
@@ -246,7 +246,7 @@ private:
     plank[2].move();
 
     for (uint32_t idx = 0; idx < 3; ++idx) {
-      if (plank[idx].containsCorners(frog)) frog.offset.x += plank[idx].speed;
+      if (plank[idx].containsCorners(frog)) frog.position.x += plank[idx].speed;
     }
 
   }
@@ -255,7 +255,7 @@ private:
     
 
     // Follow the frog ...
-    renderer->cameraPosition = frog.offset;
+    renderer->cameraPosition = frog.position;
 
     // But be a bit higher...
     renderer->cameraPosition.y += 13.0f;

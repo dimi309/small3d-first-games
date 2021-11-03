@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   Renderer *renderer = &Renderer::getInstance("Ball demo");
   GLFWwindow* window = renderer->getWindow();
   SceneObject ball("ball", "resources/ball.obj");
-  ball.offset = glm::vec3(0.0f, -1.0f, -8.0f);
+  ball.position = glm::vec3(0.0f, -1.0f, -8.0f);
   glfwSetKeyCallback(window, keyCallback);
 
   while (!glfwWindowShouldClose(window) && !esckey) {
@@ -45,13 +45,13 @@ int main(int argc, char **argv) {
     if (esckey)
       break;
     if (upkey)
-      ball.offset.z -= 0.001f;
+      ball.position.z -= 0.001f;
     else if (downkey)
-      ball.offset.z += 0.001f;
+      ball.position.z += 0.001f;
     else if (leftkey)
-      ball.offset.x -= 0.001f;
+      ball.position.x -= 0.001f;
     else if (rightkey)
-      ball.offset.x += 0.001f;
+      ball.position.x += 0.001f;
     
     renderer->render(ball, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
     renderer->swapBuffers();

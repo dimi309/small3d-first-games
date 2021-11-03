@@ -80,8 +80,8 @@ namespace ChaseTheGoat3D {
   }
 
   void GameLogic::initGame() {
-    goat.offset = glm::vec3(-1.2f, GROUND_Y, -4.0f);
-    bug.offset = glm::vec3(3.6f, GROUND_Y + BUG_START_ALTITUDE, -5.0f);
+    goat.position = glm::vec3(-1.2f, GROUND_Y, -4.0f);
+    bug.position = glm::vec3(3.6f, GROUND_Y + BUG_START_ALTITUDE, -5.0f);
     bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
     goat.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -95,8 +95,8 @@ namespace ChaseTheGoat3D {
   void GameLogic::moveGoat() {
     goatState = TURNING;
 
-    float xDistance = goat.offset.x - bug.offset.x;
-    float zDistance = goat.offset.z - bug.offset.z;
+    float xDistance = goat.position.x - bug.position.x;
+    float zDistance = goat.position.z - bug.position.z;
     float distance = sqrt(xDistance * xDistance + zDistance * zDistance);
 
     float goatRelX = xDistance / distance;
@@ -115,26 +115,26 @@ namespace ChaseTheGoat3D {
 
     }
 
-    if (goat.offset.z > MAX_Z) {
-      goat.offset.z = MAX_Z;
+    if (goat.position.z > MAX_Z) {
+      goat.position.z = MAX_Z;
       goatState = TURNING;
     }
-    if (goat.offset.z < MIN_Z) {
-      goat.offset.z = MIN_Z;
+    if (goat.position.z < MIN_Z) {
+      goat.position.z = MIN_Z;
       goatState = TURNING;
     }
-    if (goat.offset.x > MAX_X) {
-      goat.offset.x = MAX_X;
+    if (goat.position.x > MAX_X) {
+      goat.position.x = MAX_X;
       goatState = TURNING;
     }
-    if (goat.offset.x < MIN_X) {
-      goat.offset.x = MIN_X;
+    if (goat.position.x < MIN_X) {
+      goat.position.x = MIN_X;
       goatState = TURNING;
     }
 
-    goat.offset.x += goat.getOrientation().x * GOAT_SPEED;
-    goat.offset.z += goat.getOrientation().z * GOAT_SPEED;
-    goat.offset.y += goat.getOrientation().y * GOAT_SPEED;
+    goat.position.x += goat.getOrientation().x * GOAT_SPEED;
+    goat.position.z += goat.getOrientation().z * GOAT_SPEED;
+    goat.position.y += goat.getOrientation().y * GOAT_SPEED;
 
     goat.animate();
 
@@ -162,26 +162,26 @@ namespace ChaseTheGoat3D {
     bug.setRotation(bugRotation);
 
     if (keyInput.space) {
-      bug.offset.x += bug.getOrientation().x * BUG_SPEED;
-      bug.offset.z += bug.getOrientation().z * BUG_SPEED;
-      bug.offset.y += bug.getOrientation().y * BUG_SPEED;
+      bug.position.x += bug.getOrientation().x * BUG_SPEED;
+      bug.position.z += bug.getOrientation().z * BUG_SPEED;
+      bug.position.y += bug.getOrientation().y * BUG_SPEED;
     }
 
-    if (bug.offset.y < GROUND_Y + 0.5f)
-      bug.offset.y = GROUND_Y + 0.5f;
+    if (bug.position.y < GROUND_Y + 0.5f)
+      bug.position.y = GROUND_Y + 0.5f;
 
-    if (bug.offset.z > MAX_Z)
-      bug.offset.z = MAX_Z;
-    if (bug.offset.z < MIN_Z)
-      bug.offset.z = MIN_Z;
-    if (bug.offset.x > MAX_X)
-      bug.offset.x = MAX_X;
-    if (bug.offset.x < MIN_X)
-      bug.offset.x = MIN_X;
+    if (bug.position.z > MAX_Z)
+      bug.position.z = MAX_Z;
+    if (bug.position.z < MIN_Z)
+      bug.position.z = MIN_Z;
+    if (bug.position.x > MAX_X)
+      bug.position.x = MAX_X;
+    if (bug.position.x < MIN_X)
+      bug.position.x = MIN_X;
 
 
     // Bug chase camera
-    renderer->cameraPosition = bug.offset;
+    renderer->cameraPosition = bug.position;
     renderer->cameraPosition.x -= bug.getOrientation().x * 1.7f;
     renderer->cameraPosition.z -= bug.getOrientation().z * 1.7f;
     renderer->cameraPosition.y -= bug.getOrientation().y * 1.7f;
@@ -191,7 +191,7 @@ namespace ChaseTheGoat3D {
 
     bug.animate();
 
-    if (goat.contains(bug.offset)) {
+    if (goat.contains(bug.position)) {
       gameState = START_SCREEN;
       bahSound.play();
       seconds = (glfwGetTime() - startSeconds);
