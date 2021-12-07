@@ -63,7 +63,7 @@ if(MSVC)
     "-NODEFAULTLIB:LIBCMT")
   
   set_target_properties(chasethegoat3d PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
-    "${small3d_BINARY_DIR}/bin")
+    "${PROJECT_BINARY_DIR}/bin")
 endif()
 
 if(UNIX AND NOT APPLE) # Linux

@@ -34,17 +34,17 @@ if(UNIX OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND NOT
     ${BZIP2_INCLUDE_DIRS})
   target_link_libraries(ball PUBLIC
     ${BZIP2_LIBRARIES})
-endif(NOT MSVC)
+endif()
 
 if(WIN32)
   target_link_libraries(ball PUBLIC winmm)
-endif(WIN32)
+endif()
 
 if(APPLE)
   set_target_properties(ball PROPERTIES LINK_FLAGS "-framework \
 		AudioUnit -framework AudioToolbox -framework CoreAudio -framework Cocoa \
 		-framework IOKit -framework CoreVideo")
-endif(APPLE)
+endif()
 
 if(MSVC)
   set_target_properties(ball PROPERTIES LINK_FLAGS_DEBUG
@@ -53,8 +53,8 @@ if(MSVC)
     "-NODEFAULTLIB:LIBCMT")
   
   set_target_properties(ball PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
-    "${small3d_BINARY_DIR}/bin")
-endif(MSVC)
+    "${PROJECT_BINARY_DIR}/bin")
+endif()
 
 if(UNIX AND NOT APPLE) # Linux
   target_link_libraries(ball PUBLIC m pthread rt asound X11 dl)
