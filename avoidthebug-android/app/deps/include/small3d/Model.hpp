@@ -57,6 +57,10 @@ namespace small3d {
     // Name of the texture the model will be rendered with. The texture has to
     // have been previously generated with Renderer.generateTexture().
     std::string textureName = "";
+
+    // Index number used to keep track of whether or not the model has been
+    // rendered after a reinitialisation of GPU memory.
+    uint32_t renderIndex = 0;
 #else
     uint32_t positionBufferObjectId = 0;
     uint32_t indexBufferObjectId = 0;
@@ -77,11 +81,11 @@ namespace small3d {
     // file (in quaternion form)
     glm::quat origRotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
-    // Original scale, as read from a file
-    glm::vec3 origScale = glm::vec3(1.0f, 1.0f, 1.0f);
-
     // brief Original translation, as read from a file
     glm::vec3 origTranslation = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    // brief Original scale, as read from a file
+    glm::vec3 origScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
   public:
 
@@ -242,6 +246,12 @@ namespace small3d {
      *  @return The transform
      */
     glm::mat4 getJointTransform(size_t jointIdx);
+
+    /**
+     * @brief Get the Model's original scale (usually the one read from the file
+     *        the Model was loaded from.
+     */
+    glm::vec3 getOriginalScale();
 
     friend class GlbFile;
     friend class Renderer;
