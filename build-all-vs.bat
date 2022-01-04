@@ -52,7 +52,7 @@ cd ..
 if exist build rmdir /Q /S build
 mkdir build
 cd build
-cmake .. -G"Visual Studio 16 2019" -A x64 %opengl_cmake_def%
+cmake .. -G"Visual Studio 17 2022" -A x64 %opengl_cmake_def%
 if "!errorlevel!" neq "0" endlocal & exit /b !errorlevel!
 cmake --build . --config %BUILDTYPE%
 if "!errorlevel!" neq "0" endlocal & exit /b !errorlevel!
