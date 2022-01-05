@@ -96,7 +96,7 @@ void initVolumeControl(){
 }
 
 int32_t handle_input(android_app *app, AInputEvent *event) {
-  LOGDEBUG("Input event");
+
   if (gameActive) {
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
       input.enter = true;
