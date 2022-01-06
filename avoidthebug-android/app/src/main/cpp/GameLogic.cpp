@@ -20,7 +20,7 @@
 
 #define GOAT_SPEED 0.05f
 
-#define RESULT_TEXT_NAME "resutlText"
+#define RESULT_TEXT_NAME "resultText"
 
 #include <memory>
 #include <stdexcept>
@@ -47,7 +47,7 @@ namespace AvoidTheBug3D {
             tree("tree", "resources/models/Tree/tree.obj"),
             bahSound("resources/sounds/bah.ogg") {
 
-        renderer = new Renderer("Avoid the Bug 3D", 854, 480);
+        renderer = &Renderer::getInstance("Avoid the Bug 3D", 854, 480);
         renderer->cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
         renderer->createRectangle(startScreenRect, glm::vec3(-1.0f, 1.0f, 0.0f),
@@ -295,22 +295,6 @@ namespace AvoidTheBug3D {
 
     void GameLogic::render() {
 
-
-        //Uncomment for groovy nightfall effect :)
-        /* renderer->lightIntensity += lightModifier;
-
-           if (renderer->lightIntensity < 0)
-           {
-           renderer->lightIntensity = 0.0f;
-           lightModifier = 0.01f;
-           }
-
-           if (renderer->lightIntensity > 1.0f)
-           {
-           renderer->lightIntensity = 1.0f;
-           lightModifier = -0.01f;
-           } */
-
         if (gameState == START_SCREEN) {
 
             renderer->render(startScreenRect, glm::vec3(0.0f, 0.0f, 0.0f),
@@ -339,29 +323,11 @@ namespace AvoidTheBug3D {
     }
 
     void GameLogic::pause() {
-        renderer->clearBuffers(goat);
-        renderer->clearBuffers(bug);
-        renderer->clearBuffers(tree);
-        renderer->clearBuffers(skyRect);
-        renderer->clearBuffers(groundRect);
-        renderer->clearBuffers(msgRect);
-        renderer->clearBuffers(startScreenRect);
-        delete renderer;
+        renderer->destroyVulkan();
     }
 
     void GameLogic::resume() {
-        renderer = new Renderer("Avoid the Bug 3D", 854, 480);
-
-        renderer->cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-
-        Image goatTexture("resources/models/Goat/goat.png");
-        renderer->generateTexture("goatTexture", goatTexture);
-
-        Image treeTexture("resources/models/Tree/tree.png");
-        renderer->generateTexture("treeTexture", treeTexture);
-
-        Image startScreenTexture("resources/images/startScreen.png");
-        renderer->generateTexture("startScreen", startScreenTexture);
+        renderer->setupVulkan();
     }
 
 }
