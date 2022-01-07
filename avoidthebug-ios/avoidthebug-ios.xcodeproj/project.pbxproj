@@ -30,8 +30,8 @@
 /* Begin PBXFileReference section */
 		8C0401F023E9344500A83029 /* avoidthebug-ios copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "avoidthebug-ios copy-Info.plist"; path = "/Users/me/Source/avoidthebug-ios/avoidthebug-ios copy-Info.plist"; sourceTree = "<absolute>"; };
 		8C25D63B2339391900C09060 /* libMoltenVK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMoltenVK.a; path = deps/lib/libMoltenVK.a; sourceTree = "<group>"; };
-		8C25D63D2339397300C09060 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = deps/lib/libMoltenVK.dylib; sourceTree = "<group>"; };
 		8C46F088233BD44E005E7702 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8C4CF6E82788839800F9F4E8 /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = ../../../SoftwareVulkanSDK/1.2.198.1/MoltenVK/MoltenVK.xcframework; sourceTree = "<group>"; };
 		8C68E6B92345E18F0004CAE6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8C7A8658237145A300EF9865 /* resources1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resources1; path = small3dios/resources1; sourceTree = "<group>"; };
 		8C8AB53923315064004325AF /* Avoid the Bug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Avoid the Bug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,10 +123,10 @@
 		8C9CBAE923377A0900F84FD5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C4CF6E82788839800F9F4E8 /* MoltenVK.xcframework */,
 				8CD5F9F7256027A300E349AE /* libsmall3d.a */,
 				8C68E6B92345E18F0004CAE6 /* OpenAL.framework */,
 				8C9AF962233BCA7B00C5505E /* libz.a */,
-				8C25D63D2339397300C09060 /* libMoltenVK.dylib */,
 				8C25D63B2339391900C09060 /* libMoltenVK.a */,
 				8C9CBAEC23377A0A00F84FD5 /* libbz2.a */,
 				8C9CBAEE23377A0A00F84FD5 /* libfreetype.a */,

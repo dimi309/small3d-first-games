@@ -49,7 +49,7 @@ goat("goat", "resources1/models/Goat/goatAnim",
 bug("bug", "resources1/models/Bug/bugAnim", 9),
 tree("tree", "resources1/models/Tree/tree.obj"),
 bahSound("resources1/sounds/bah.ogg"){
-    
+  renderer = &Renderer::getInstance("Avoid the Bug 3D", 854, 480);
     renderer->createRectangle(startScreenRect, glm::vec3(-1.0f, 1.0f, 1.0f),
                               glm::vec3(1.0f, -1.0f, 1.0f));
     renderer->createRectangle(msgRect,
@@ -59,7 +59,7 @@ bahSound("resources1/sounds/bah.ogg"){
     renderer->createRectangle(groundRect, glm::vec3(-25.0f, GROUND_Y, MIN_Z),
                               glm::vec3(25.0f, GROUND_Y, MAX_Z));
     
-    renderer = new Renderer("Avoid the Bug 3D", 854, 480);
+    
     renderer->cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     
     Image goatTexture("resources1/models/Goat/goat.png");
@@ -328,31 +328,11 @@ void GameLogic::render() {
 }
 
 void GameLogic::pause() {
-    renderer->clearBuffers(goat);
-    renderer->clearBuffers(bug);
-    renderer->clearBuffers(tree);
-    renderer->clearBuffers(skyRect);
-    renderer->clearBuffers(groundRect);
-    renderer->clearBuffers(msgRect);
-    renderer->clearBuffers(startScreenRect);
-    
-    delete renderer;
+  renderer->destroyVulkan();
 }
 
 void GameLogic::resume() {
-    renderer = new Renderer("Avoid the Bug 3D", 854, 480);
-    
-    renderer->cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-    
-    Image goatTexture("resources1/models/Goat/goat.png");
-    renderer->generateTexture("goatTexture", goatTexture);
-    
-    Image treeTexture("resources1/models/Tree/tree.png");
-    renderer->generateTexture("treeTexture", treeTexture);
-    
-    Image startScreenTexture("resources1/images/startScreen.png");
-    renderer->generateTexture("startScreen", startScreenTexture);
-    
+  renderer->setupVulkan();    
 }
 
 }

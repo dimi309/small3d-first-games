@@ -5,11 +5,11 @@
 
 # Building
 
-Three of the games are included in IDE projects for mobile devices:
+Four of the games are included in IDE projects for mobile devices:
 
 	- avoidthebug-android & islet-hell-android: just open with Android Studio and build and deploy from there
 
-	- avoidthebug-ios: the same, but with Xcode
+	- avoidthebug-ios & islet-hell-ios: the same, but with Xcode
 
 The rest of the games can be built by executing:
  

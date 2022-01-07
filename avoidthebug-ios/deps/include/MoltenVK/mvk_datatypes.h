@@ -1,7 +1,7 @@
 /*
  * mvk_datatypes.h
  *
- * Copyright (c) 2015-2020 The Brenwill Workshop Ltd. (http://www.brenwill.com)
+ * Copyright (c) 2015-2021 The Brenwill Workshop Ltd. (http://www.brenwill.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -286,13 +286,10 @@ VkExtent3D mvkMipmapBaseSizeFromLevelSize3D(VkExtent3D levelSize, uint32_t level
 
 #pragma mark Samplers
 
-/**
- * Returns the Metal MTLSamplerAddressMode corresponding to the specified Vulkan VkSamplerAddressMode,
- * or returns MTLSamplerAddressModeMirrorClampToEdge if no corresponding MTLSamplerAddressMode exists.
- */
+/** Returns the Metal MTLSamplerAddressMode corresponding to the specified Vulkan VkSamplerAddressMode. */
 MTLSamplerAddressMode mvkMTLSamplerAddressModeFromVkSamplerAddressMode(VkSamplerAddressMode vkMode);
 
-#ifdef __MAC_OS_X_VERSION_MAX_ALLOWED
+#if MVK_MACOS_OR_IOS
 /**
  * Returns the Metal MTLSamplerBorderColor corresponding to the specified Vulkan VkBorderColor,
  * or returns MTLSamplerBorderColorTransparentBlack if no corresponding MTLSamplerBorderColor exists.
@@ -323,7 +320,8 @@ typedef enum {
 	kMVKShaderStageTessEval,
 	kMVKShaderStageFragment,
 	kMVKShaderStageCompute,
-	kMVKShaderStageMax
+	kMVKShaderStageCount,
+	kMVKShaderStageMax = kMVKShaderStageCount	// Pubic API legacy value
 } MVKShaderStage;
 
 /** Returns the Metal MTLColorWriteMask corresponding to the specified Vulkan VkColorComponentFlags. */
@@ -360,7 +358,7 @@ MTLTriangleFillMode mvkMTLTriangleFillModeFromVkPolygonMode(VkPolygonMode vkFill
 MTLLoadAction mvkMTLLoadActionFromVkAttachmentLoadOp(VkAttachmentLoadOp vkLoadOp);
 
 /** Returns the Metal MTLStoreAction corresponding to the specified Vulkan VkAttachmentStoreOp. */
-MTLStoreAction mvkMTLStoreActionFromVkAttachmentStoreOp(VkAttachmentStoreOp vkStoreOp, bool hasResolveAttachment);
+MTLStoreAction mvkMTLStoreActionFromVkAttachmentStoreOp(VkAttachmentStoreOp vkStoreOp, bool hasResolveAttachment, bool canResolveFormat = true);
 
 /** Returns the Metal MTLMultisampleDepthResolveFilter corresponding to the specified Vulkan VkResolveModeFlagBits. */
 MTLMultisampleDepthResolveFilter mvkMTLMultisampleDepthResolveFilterFromVkResolveModeFlagBits(VkResolveModeFlagBits vkResolveMode);
@@ -424,6 +422,14 @@ static inline VkExtent2D mvkVkExtent2DFromCGSize(CGSize cgSize) {
 	vkExt.width = cgSize.width;
 	vkExt.height = cgSize.height;
 	return vkExt;
+}
+
+/** Returns a CGSize that corresponds to the specified VkExtent2D. */
+static inline CGSize mvkCGSizeFromVkExtent2D(VkExtent2D vkExtent) {
+	CGSize cgSize;
+	cgSize.width = vkExtent.width;
+	cgSize.height = vkExtent.height;
+	return cgSize;
 }
 
 /** Returns a Metal MTLOrigin constructed from a VkOffset3D. */
