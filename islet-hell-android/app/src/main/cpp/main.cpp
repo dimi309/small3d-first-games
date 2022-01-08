@@ -211,12 +211,7 @@ void process(const KeyInput& keyInput) {
   }
 
   if (splash(planes[0])) {
-
-    sndSplash->play(true);
-  }
-  else {
-    sndSplash->stop();
-
+    sndSplash->play();
   }
 
   bool foundOneAlive = false;
