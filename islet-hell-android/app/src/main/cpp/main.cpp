@@ -176,7 +176,7 @@ void process(const KeyInput& keyInput) {
   }
 
   if (keyInput.space) {
-    sndGun->play();
+    sndGun->play(true);
     shoot(planes[0].position, planes[0].getOrientation());
   }
   else {
@@ -211,10 +211,12 @@ void process(const KeyInput& keyInput) {
   }
 
   if (splash(planes[0])) {
-    sndSplash->play();
+
+    sndSplash->play(true);
   }
   else {
     sndSplash->stop();
+    
   }
 
   bool foundOneAlive = false;
