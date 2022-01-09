@@ -64,6 +64,8 @@ KeyInput keyInput;
 GameLoopAndInput fs;
 std::shared_ptr<Map> map;
 
+bool splashing = false;
+
 float screenWidth = 0.0f, screenHeight = 0.0f;
 
 std::vector<GameObject> planes;
@@ -176,11 +178,14 @@ void process(const KeyInput& keyInput) {
   }
 
   if (keyInput.space) {
-    sndGun->play(true);
+
+    // Low-end Android can't handle this..
+    // sndGun->play(true);
+
     shoot(planes[0].position, planes[0].getOrientation());
   }
   else {
-    sndGun->stop();
+    //sndGun->stop();
   }
 
   planes[0].position += planes[0].getOrientation() * planeSpeed;
@@ -211,7 +216,13 @@ void process(const KeyInput& keyInput) {
   }
 
   if (splash(planes[0])) {
-    //sndSplash->play(true);
+    splashing = true;
+    sndEngine->stop();
+    sndSplash->play(true);
+  } else {
+    splashing = false;
+    sndSplash->stop();
+    sndEngine->play(true);
   }
 
   bool foundOneAlive = false;
