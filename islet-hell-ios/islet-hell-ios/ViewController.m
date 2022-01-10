@@ -582,21 +582,21 @@ void touched(int x, int y) {
          float xval = static_cast<float>(x) / screenWidth;
          float yval = static_cast<float>(y) / screenHeight;
 
-         if (yval > 0.9f) {
-           if (xval < 0.1f) {
+         if (yval > 0.85f) {
+           if (xval < 0.15f) {
              keyInput.left = true;
-           } else if (xval < 0.2f) {
+           } else if (xval < 0.25f) {
              keyInput.down = true;
-           } else if (xval < 0.3f) {
+           } else if (xval < 0.45f) {
              keyInput.right = true;
            }
-         } else if (yval > 0.8f) {
-           if (xval > 0.1f && xval < 0.2f) {
+         } else if (yval > 0.75f) {
+           if (xval > 0.15f && xval < 0.3f) {
              keyInput.up = true;
            }
          }
 
-         if (yval > 0.45f && yval < 0.55f && xval > 0.9f) {
+         if (yval > 0.4f && yval < 0.6f && xval > 0.8f) {
              keyInput.space = true;
          }
        }
