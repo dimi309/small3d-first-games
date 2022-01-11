@@ -7,7 +7,7 @@
  */
 
 #define MAX_Z -1.0f
-#define MIN_Z -24.0f
+#define MIN_Z -24.0
 
 #define GROUND_Y -1.0f
 
