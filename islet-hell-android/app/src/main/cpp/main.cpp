@@ -175,7 +175,7 @@ void process(const KeyInput& keyInput) {
     rotation.z = -planeTurnSpeed;
   }
 
-  if (keyInput.space) {
+  if (currentTimeInSeconds() - keyInput.space < 1.0f) {
     sndGun->play(true);
     shoot(planes[0].position, planes[0].getOrientation());
   }
@@ -265,7 +265,10 @@ void process(const KeyInput& keyInput) {
 
         bool exploded = false;
         while (glm::length(isletPos - planes[0].position) < isletTouchDistance) {
-          if (!exploded && !planes[0].dead) explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+          if (!exploded && !planes[0].dead) {
+            explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+            sndExplosion->play();
+          }
           exploded = true;
           planes[0].position.y += 0.001f;
           planes[0].dead = true;
@@ -283,7 +286,10 @@ void process(const KeyInput& keyInput) {
 
           while (glm::length(isletPos - plit->position) < isletTouchDistance) {
             if (!plit->dead) {
-              if (!exploded) explode(plit->position, enemySpeed * plit->getOrientation());
+              if (!exploded) {
+                explode(plit->position, enemySpeed * plit->getOrientation());
+                sndExplosion->play();
+              }
               exploded = true;
               plit->position.y += 0.001f;
               plit->dead = true;
@@ -340,6 +346,7 @@ void render() {
       r->render(particle, p.position, p.rotation, p.colour);
       if (planes[0].contains(p.position) && !planes[0].dead) {
         explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+        sndExplosion->play();
         planes[0].dead = true;
         if (timeToEnd == -1.0f) {
           timeToEnd = endAfterSeconds;
@@ -348,6 +355,7 @@ void render() {
       for (auto& pln : planes) {
         if (pln.contains(p.position)) {
           explode(pln.position, enemySpeed * pln.getOrientation());
+          sndExplosion->play();
           pln.dead = true;
         }
       }
@@ -363,6 +371,7 @@ void render() {
     --planesLeftInList;
     if (!planes[0].dead && planes[0].getSector() == plit->getSector() && plit->containsCorners(planes[0])) {
       explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+      sndExplosion->play();
       plit->dead = true;
       planes[0].dead = true;
       if (timeToEnd == -1.0f) {
@@ -376,6 +385,7 @@ void render() {
     for (auto lidx = 1; lidx <= planesLeftInList; ++lidx) {
       if (!plit->dead && plit->getSector() == (plit + lidx)->getSector() && plit->containsCorners(*(plit + lidx))) {
         explode(plit->position, enemySpeed * plit->getOrientation());
+        sndExplosion->play();
         plit->dead = true;
         (plit + lidx)->dead = true;
       }
@@ -477,7 +487,7 @@ void renderControls() {
               keyInput.up ? "buttonOn":"buttonOff", false);
 
     r->render(button, glm::vec3(0.8f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec4(0.0f),
-              keyInput.space ? "buttonOn":"buttonOff", false);
+              (currentTimeInSeconds() - keyInput.space < 1.0f) ? "buttonOn":"buttonOff", false);
 }
 
 void write(std::string text, float elevation) {
@@ -511,7 +521,6 @@ void explode(const glm::vec3& position, const glm::vec3& initSpeed) {
     genParticles(position, 120, initSpeed +
                                 glm::vec3(0.001f * distrEq(gen), 0.001f * distrEq(gen), 0.001f * distrEq(gen)),
                  30, glm::vec3(0.0f, -0.0001f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), false);
-    sndExplosion->play();
   }
 }
 
@@ -689,7 +698,7 @@ int32_t handle_input(android_app *app, AInputEvent *event) {
         }
 
         if (yval > 0.4f && yval < 0.6f && xval > 0.8f) {
-            keyInput.space = true;
+            keyInput.space = currentTimeInSeconds();
         }
       }
   } else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY) {
@@ -757,7 +766,9 @@ void android_main(struct android_app *state) {
     double secondsInterval = 1.0 / frameRate;
 
     do {
+      auto tmp = keyInput.space;
       keyInput = {};
+      keyInput.space = tmp;
       if (ALooper_pollAll(0, nullptr, &events, (void **) &pSource) >= 0) {
         if (pSource != NULL) {
           pSource->process(state, pSource);
