@@ -211,17 +211,12 @@ void process(const KeyInput& keyInput) {
   }
 
   if (splash(planes[0])) {
-
-    //sndEngine->stop();
-    //sndSplash->play(true);
+    sndSplash->play(true);
   } else {
-
-    //sndSplash->stop();
-    //sndEngine->play(true);
+    sndSplash->stop();
   }
 
   bool foundOneAlive = false;
-
 
   for (auto plit = planes.begin() + 1; plit != planes.end(); ++plit) {
 
