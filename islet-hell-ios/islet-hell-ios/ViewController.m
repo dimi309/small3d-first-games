@@ -19,7 +19,7 @@ extern "C" {
 }
 
 #include "Settings.hpp"
-#include <small3d/Renderer.hpp>
+
 #include <small3d/Model.hpp>
 #include <small3d/SceneObject.hpp>
 #include <small3d/Sound.hpp>
@@ -87,7 +87,6 @@ std::vector<Particle> particles;
 
 Pyramid particle(0.1f);
 
-small3d::Renderer *r;
 glm::vec3 rotation = glm::vec3(0.0f);
 float sea_y = seaLevel;
 float waveSpeed = -0.0001f;
@@ -97,7 +96,7 @@ std::unique_ptr<small3d::Sound> sndGun;
 std::unique_ptr <small3d::Sound> sndSplash;
 std::unique_ptr <small3d::Sound> sndExplosion;
 
-bool instantiated = false;
+
 
 double currentTimeInSeconds() {
   struct timeval tv;

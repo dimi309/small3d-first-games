@@ -9,3 +9,6 @@
 #include "flags.h"
 
 int app_active;
+small3d::Renderer *r = nullptr;
+bool instantiated = false;
+bool deactivatedOnce = false;
