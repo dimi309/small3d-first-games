@@ -44,6 +44,7 @@ namespace small3d {
       bool repeat = false;
       unsigned long currentFrame = 0;
       std::vector<char> data;
+      bool playingRepeat = false;
     };
 
     SoundData soundData;
@@ -77,6 +78,10 @@ static ALCcontext *openalContext;
       void *userData,
       void *audioData,
       int32_t numFrames);
+    static void errorCallback(AAudioStream *stream, void *userData, aaudio_result_t error);
+    static void asyncAndroidStopOnceFinished(AAudioStream *stream, long samples);
+    static void asyncAndroidStopImmediately(AAudioStream *stream);
+
 #endif
 
     void load(const std::string soundFilePath);

@@ -267,7 +267,10 @@ void process(const KeyInput& keyInput) {
 
         bool exploded = false;
         while (glm::length(isletPos - planes[0].position) < isletTouchDistance) {
-          if (!exploded && !planes[0].dead) explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+            if (!exploded && !planes[0].dead) {
+                explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+                sndExplosion->play();
+            }
           exploded = true;
           planes[0].position.y += 0.001f;
           planes[0].dead = true;
@@ -285,7 +288,10 @@ void process(const KeyInput& keyInput) {
 
           while (glm::length(isletPos - plit->position) < isletTouchDistance) {
             if (!plit->dead) {
-              if (!exploded) explode(plit->position, enemySpeed * plit->getOrientation());
+                if (!exploded) {
+                    explode(plit->position, enemySpeed * plit->getOrientation());
+                    sndExplosion->play();
+                }
               exploded = true;
               plit->position.y += 0.001f;
               plit->dead = true;
@@ -342,6 +348,7 @@ void render() {
       r->render(particle, p.position, p.rotation, p.colour);
       if (planes[0].contains(p.position) && !planes[0].dead) {
         explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+          sndExplosion->play();
         planes[0].dead = true;
         if (timeToEnd == -1.0f) {
           timeToEnd = endAfterSeconds;
@@ -350,6 +357,7 @@ void render() {
       for (auto& pln : planes) {
         if (pln.contains(p.position)) {
           explode(pln.position, enemySpeed * pln.getOrientation());
+            sndExplosion->play();
           pln.dead = true;
         }
       }
@@ -365,6 +373,7 @@ void render() {
     --planesLeftInList;
     if (!planes[0].dead && planes[0].getSector() == plit->getSector() && plit->containsCorners(planes[0])) {
       explode(planes[0].position, planeSpeed * planes[0].getOrientation());
+        sndExplosion->play();
       plit->dead = true;
       planes[0].dead = true;
       if (timeToEnd == -1.0f) {
@@ -378,6 +387,7 @@ void render() {
     for (auto lidx = 1; lidx <= planesLeftInList; ++lidx) {
       if (!plit->dead && plit->getSector() == (plit + lidx)->getSector() && plit->containsCorners(*(plit + lidx))) {
         explode(plit->position, enemySpeed * plit->getOrientation());
+          sndExplosion->play();
         plit->dead = true;
         (plit + lidx)->dead = true;
       }
@@ -513,7 +523,7 @@ void explode(const glm::vec3& position, const glm::vec3& initSpeed) {
     genParticles(position, 120, initSpeed +
                                 glm::vec3(0.001f * distrEq(gen), 0.001f * distrEq(gen), 0.001f * distrEq(gen)),
                  30, glm::vec3(0.0f, -0.0001f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), false);
-    sndExplosion->play();
+    
   }
 }
 
@@ -575,33 +585,42 @@ void shoot(const glm::vec3& position, const glm::vec3& direction) {
   genParticles(position + 0.5f * direction, 100, bulletSpeed * direction, 1, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false);
 }
 
-void touched(int x, int y) {
+void touched(int x, int y, bool isTouched) {
   if (app_active) {
-       
+      
+      
        if (screenWidth != 0 && screenHeight != 0) {
          float xval = static_cast<float>(x) / screenWidth;
          float yval = static_cast<float>(y) / screenHeight;
+           
+           if (yval > 0.4f && yval < 0.6f && xval > 0.8f) {
+               keyInput.space = isTouched;
+           } else if (isTouched) {
+               keyInput.left = false;
+               keyInput.right = false;
+               keyInput.up = false;
+               keyInput.down = false;
+           }
 
          if (yval > 0.85f) {
            if (xval < 0.15f) {
-             keyInput.left = true;
+             keyInput.left = isTouched;
            } else if (xval < 0.25f) {
-             keyInput.down = true;
+             keyInput.down = isTouched;
            } else if (xval < 0.45f) {
-             keyInput.right = true;
+             keyInput.right = isTouched;
            }
          } else if (yval > 0.75f) {
            if (xval > 0.15f && xval < 0.3f) {
-             keyInput.up = true;
+             keyInput.up = isTouched;
            }
          }
 
-         if (yval > 0.4f && yval < 0.6f && xval > 0.8f) {
-             keyInput.space = true;
-         }
+           
        }
 }
 }
+
 @implementation ViewController {
   CADisplayLink* _displayLink;
 }
@@ -685,6 +704,7 @@ void touched(int x, int y) {
 -(void) renderLoop {
   if (app_active) {
     process(keyInput);
+    
     render();
   }
 }
@@ -696,23 +716,26 @@ void touched(int x, int y) {
   UITouch *touch = [[event allTouches] anyObject];
   CGPoint touchPoint = [touch locationInView:self.view];
   keyInput.enter = true;
-  touched(touchPoint.x, touchPoint.y);
+  touched(touchPoint.x, touchPoint.y, true);
   //LOGDEBUG("touch begin " + intToStr(touchPoint.x) + " - " + intToStr(touchPoint.y));
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches
            withEvent:(UIEvent *)event {
-  UITouch *touch = [[event allTouches] anyObject];
-  CGPoint touchPoint = [touch locationInView:self.view];
-  
-  keyInput.enter = true;
-  touched(touchPoint.x, touchPoint.y);
-  //LOGDEBUG("touch move " + intToStr(touchPoint.x) + " - " + intToStr(touchPoint.y));
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchPoint = [touch locationInView:self.view];
+    keyInput.enter = true;
+    touched(touchPoint.x, touchPoint.y, true);
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches
            withEvent:(UIEvent *)event {
-  keyInput = {};
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchPoint = [touch locationInView:self.view];
+    keyInput.enter = false;
+    touched(touchPoint.x, touchPoint.y, false);
+
 }
 
 
