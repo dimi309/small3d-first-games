@@ -731,7 +731,7 @@ void touched(int x, int y, bool isTouched) {
     CGPoint touchPoint = [touch locationInView:self.view];
     keyInput.enter = true;
     touched(touchPoint.x, touchPoint.y, true);
-    //LOGDEBUG("touch begin " + intToStr(touchPoint.x) + " - " + intToStr(touchPoint.y));
+    //LOGDEBUG("touch begin " + std::to_string(touchPoint.x) + " - " + //std::to_string(touchPoint.y));
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches
@@ -740,6 +740,7 @@ void touched(int x, int y, bool isTouched) {
     CGPoint touchPoint = [touch locationInView:self.view];
     keyInput.enter = true;
     touched(touchPoint.x, touchPoint.y, true);
+    //LOGDEBUG("touch move " + std::to_string(touchPoint.x) + " - " + //std::to_string(touchPoint.y));
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches
@@ -749,7 +750,7 @@ void touched(int x, int y, bool isTouched) {
     CGPoint touchPoint = [touch locationInView:self.view];
     keyInput.enter = false;
     touched(touchPoint.x, touchPoint.y, false);
-    
+    //LOGDEBUG("touch end " + std::to_string(touchPoint.x) + " - " + //std::to_string(touchPoint.y));
 }
 
 
