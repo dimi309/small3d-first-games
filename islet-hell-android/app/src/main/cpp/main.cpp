@@ -320,8 +320,40 @@ void process(const KeyInput &keyInput) {
         }
     }
 
-    for (auto &p : particles) {
+    for (auto& p : particles) {
+
+
+        r->render(particle, p.position, p.rotation, p.colour);
+
+
+    }
+
+    int explodeIndex = -1;
+    int currentIndex = 0;
+
+    for (auto& p : particles) {
         p.process();
+        if (p.colour.x == 0.0f) {
+            r->render(particle, p.position, p.rotation, p.colour);
+            for (auto& pln : planes) {
+                if (pln.contains(p.position) && !pln.dead) {
+                    explodeIndex = currentIndex;
+
+                }
+            }
+        }
+        ++currentIndex;
+    }
+
+    if (explodeIndex != -1) {
+        explode(planes[static_cast<uint32_t>(explodeIndex)].position, planeSpeed * planes[static_cast<uint32_t>(explodeIndex)].getOrientation());
+        sndExplosion->play();
+        planes[static_cast<uint32_t>(explodeIndex)].dead = true;
+        if (explodeIndex == 0) {
+            if (timeToEnd == -1.0f) {
+                timeToEnd = endAfterSeconds;
+            }
+        }
     }
 
     auto it = particles.begin();
@@ -353,29 +385,8 @@ void render() {
 
     r->render(planes[0], glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
 
-    // Checking bullet particle collisions while rendering, so that
-    // we don't loop through them twice
-    for (auto &p : particles) {
-        if (p.colour.x == 0.0f) {
-            r->render(particle, p.position, p.rotation, p.colour);
-            if (planes[0].contains(p.position) && !planes[0].dead) {
-                explode(planes[0].position, planeSpeed * planes[0].getOrientation());
-                sndExplosion->play();
-                planes[0].dead = true;
-                if (timeToEnd == -1.0f) {
-                    timeToEnd = endAfterSeconds;
-                }
-            }
-            for (auto &pln : planes) {
-                if (pln.contains(p.position)) {
-                    explode(pln.position, enemySpeed * pln.getOrientation());
-                    sndExplosion->play();
-                    pln.dead = true;
-                }
-            }
-        } else {
-            r->render(particle, p.position, p.rotation, p.colour);
-        }
+    for (auto& p : particles) {
+        r->render(particle, p.position, p.rotation, p.colour);
     }
 
     auto planesLeftInList = planes.size() - 1;
