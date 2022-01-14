@@ -306,21 +306,21 @@ void process(const KeyInput& keyInput) {
     }
     
     int explodeIndex = -1;
-    int currentIndex = 0;
-    
+  
     for (auto& p : particles) {
-        p.process();
-        if (p.colour.x == 0.0f) {
-            r->render(particle, p.position, p.rotation, p.colour);
-            for (auto& pln : planes) {
-                if (pln.contains(p.position) && !pln.dead) {
-                    explodeIndex = currentIndex;
-                    
-                    }
-            }
-        }
-        ++currentIndex;
+      p.process();
+      if (p.colour.x == 0.0f) {
+	int currentIndex = 0;
+	for (auto& pln : planes) {
+	  if (pln.contains(p.position) && !pln.dead) {
+	    explodeIndex = currentIndex;
+	  }
+	  ++currentIndex;
+	}
+      }
+    
     }
+
     
     if (explodeIndex != -1) {
         explode(planes[static_cast<uint32_t>(explodeIndex)].position, planeSpeed * planes[static_cast<uint32_t>(explodeIndex)].getOrientation());
