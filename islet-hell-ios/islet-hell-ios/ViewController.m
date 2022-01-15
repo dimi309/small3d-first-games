@@ -60,6 +60,7 @@ void initGame();
 bool playing = false;
 bool firstRound = true;
 double timeToEnd = -1.0;
+double timeToStart = 0.0;
 double prevTime = -1.0;
 
 KeyInput keyInput;
@@ -129,13 +130,16 @@ void process(const KeyInput& keyInput) {
     
     if (!playing) {
         
-        if (keyInput.enter) {
+        if (keyInput.enter && timeToStart <= 0.0) {
             
             playing = true;
             timeToEnd = -1.0;
             prevTime = -1.0;
             initGame();
             firstRound = false;
+        } else {
+            timeToStart -= currentTimeInSeconds() - prevTime;
+            prevTime = currentTimeInSeconds();
         }
         return;
     }
@@ -149,7 +153,8 @@ void process(const KeyInput& keyInput) {
         if (timeToEnd < 0) {
             playing = false;
             timeToEnd = -1.0;
-            prevTime = -1.0;
+            prevTime = currentTimeInSeconds();
+            timeToStart = 2.0f;
             particles.clear();
             sndEngine->stop();
         }
@@ -306,21 +311,21 @@ void process(const KeyInput& keyInput) {
     }
     
     int explodeIndex = -1;
-  
-    for (auto& p : particles) {
-      p.process();
-      if (p.colour.x == 0.0f) {
-	int currentIndex = 0;
-	for (auto& pln : planes) {
-	  if (pln.contains(p.position) && !pln.dead) {
-	    explodeIndex = currentIndex;
-	  }
-	  ++currentIndex;
-	}
-      }
     
+    for (auto& p : particles) {
+        p.process();
+        if (p.colour.x == 0.0f) {
+            int currentIndex = 0;
+            for (auto& pln : planes) {
+                if (pln.contains(p.position) && !pln.dead) {
+                    explodeIndex = currentIndex;
+                }
+                ++currentIndex;
+            }
+        }
+        
     }
-
+    
     
     if (explodeIndex != -1) {
         explode(planes[static_cast<uint32_t>(explodeIndex)].position, planeSpeed * planes[static_cast<uint32_t>(explodeIndex)].getOrientation());
@@ -357,7 +362,7 @@ void render() {
                 write("* All enemies destroyed. YOU WIN! *", 0.4f);
             }
         }
-        write("Press enter to start.");
+        write("Tap to start.");
         r->swapBuffers();
         return;
     }
