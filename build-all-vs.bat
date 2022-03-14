@@ -25,6 +25,7 @@ endlocal & exit /b 1
 )
 
 git clone https://github.com/dimi309/small3d
+rmdir /Q /S /y small3d\.git
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd small3d
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
@@ -34,10 +35,7 @@ call build-vs %1 %2
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd ..\..
 
-REM Not building ball because it needs to be skipped for OpenGL
-REM and continuing in a .bat for loop would produce a lot more
-REM code
-for %%A in (avoidthebug, chasethegoat, frogremixed, gloom, serial-model-renderer) do (
+for %%A in (avoidthebug, chasethegoat, frogremixed, serial-model-renderer) do (
 cd %%A
 if exist deps rmdir /Q /S deps
 mkdir deps

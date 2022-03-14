@@ -39,9 +39,6 @@ if /I "%~1" == "release" set CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=Release
 
 if /I "%~2" == "opengl" set CMAKE_DEFINITIONS=%CMAKE_DEFINITIONS% -DSMALL3D_OPENGL=ON
 
-REM Not building ball because it needs to be skipped for OpenGL
-REM and continuing in a .bat for loop would produce a lot more
-REM code
 REM For building serial-model-renderer a recent version 
 REM of gcc is needed, most likely >8. Otherwise the following
 REM error is produced:
@@ -51,7 +48,7 @@ REM || (__p.has_root_name() && __p.root_name() != root_name()))
 REM This is related to std::filesystem::directory_iterator, used in the program.
 REM Not building serial-model-renderer by default because appveyor user and
 REM older gcc version.
-for %%A in (avoidthebug, chasethegoat, frogremixed, gloom) do (
+for %%A in (avoidthebug, chasethegoat, frogremixed) do (
 cd %%A
 if exist deps rmdir /Q /S deps
 mkdir deps

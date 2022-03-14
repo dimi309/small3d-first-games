@@ -22,7 +22,7 @@ else
     export CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=$1
 fi
 
-for sampledir in avoidthebug ball chasethegoat frogremixed gloom serial-model-renderer
+for sampledir in avoidthebug chasethegoat frogremixed serial-model-renderer
 do
 
     if [ "$2" == "opengl" ] && [ "$sampledir" == "ball" ]; then
