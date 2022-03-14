@@ -25,7 +25,7 @@ endlocal & exit /b 1
 )
 
 git clone https://github.com/dimi309/small3d
-rmdir /Q /S /y small3d\.git
+rmdir /Q /S small3d\.git
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd small3d
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%

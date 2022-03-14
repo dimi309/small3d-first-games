@@ -10,6 +10,7 @@ if [ ! -z "$2" ] && [ "$2" != "opengl" ]; then
 fi
 
 git clone https://github.com/dimi309/small3d
+rm -rf small3d/.git
 cd small3d
 cd scripts
 ./build.sh $1 $2
