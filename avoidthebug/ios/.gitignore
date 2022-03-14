@@ -70,3 +70,6 @@ iOSInjectionProject/
 .DS_Store
 *~
 !small3d
+
+/deps
+/ios/islet-hell-ios/resources1/shaders

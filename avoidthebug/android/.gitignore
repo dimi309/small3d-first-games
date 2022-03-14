@@ -13,5 +13,7 @@
 /captures
 .externalNativeBuild
 .cxx
-*~
-!small3d
+local.properties
+/app/deps
+/app/src/main/assets/resources/shaders
+*.so
