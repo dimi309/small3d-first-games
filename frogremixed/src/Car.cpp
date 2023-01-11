@@ -32,14 +32,14 @@ void Car::render(Renderer *renderer) {
 		   glm::vec3(this->position.x + (this->getRotationXYZ().y > 0.0f ? 1.4f : 1.9f),
 			     this->position.y,
 			     this->position.z + 1.0f),
-		   this->getRotation(),
+		   this->getRotationXYZ(),
 		   glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
   renderer->render(this->wheel,
 		   glm::vec3(this->position.x - (this->getRotationXYZ().y > 0.0f ? 1.9f : 1.4f),
 			     this->position.y,
 			     this->position.z + 1.0f),
-		   this->getRotation(),
+		   this->getRotationXYZ(),
 		   glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 		   
   
