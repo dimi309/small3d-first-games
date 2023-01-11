@@ -185,7 +185,7 @@ namespace ChaseTheGoat3D {
     renderer->cameraPosition.x -= bug.getOrientation().x * 1.7f;
     renderer->cameraPosition.z -= bug.getOrientation().z * 1.7f;
     renderer->cameraPosition.y -= bug.getOrientation().y * 1.7f;
-    renderer->setCameraRotation(bug.getRotation());
+    renderer->setCameraRotation(bug.getRotationXYZ());
     if (renderer->cameraPosition.y < GROUND_Y + 1.0f)
       renderer->cameraPosition.y = GROUND_Y + 1.0f;
 
