@@ -1,8 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 set args_ok=false
-set opengl_ok=false
-set opengl_cmake_def=
 
 if /I "%~1" == "debug" (
 set args_ok=true
@@ -12,33 +10,25 @@ if /I "%~1" == "release" (
 set args_ok=true
 set BUILDTYPE=Release
 )
-if /I "%~2" == "" set opengl_ok=true
-if /I "%~2" == "opengl" (
-set opengl_ok=true
-set opengl_cmake_def=-DSMALL3D_OPENGL=ON
-)
-if not "%opengl_ok%" == "true" set args_ok=false
 
 if "%args_ok%" == "false" (
-echo Please indicate build type: debug or release, followed by opengl if you would like to also prepare OpenGL-related libraries.
+echo Please indicate build type: Debug or Release
 endlocal & exit /b 1
 )
 
-git clone https://github.com/dimi309/small3d
-rmdir /Q /S small3d\.git
+if not exist small3d\build (
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd small3d
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd scripts
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
-call build-mingw %1 %2
+call build-mingw %1
 if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd ..\..
+)
 
 if /I "%~1" == "debug" set CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=Debug
 if /I "%~1" == "release" set CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=Release
-
-if /I "%~2" == "opengl" set CMAKE_DEFINITIONS=%CMAKE_DEFINITIONS% -DSMALL3D_OPENGL=ON
 
 REM For building serial-model-renderer a recent version 
 REM of gcc is needed, most likely >8. Otherwise the following
