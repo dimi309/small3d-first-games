@@ -1,0 +1,3 @@
+[submodule "small3d"]
+	path = small3d
+	url = https://github.com/dimi309/small3d
