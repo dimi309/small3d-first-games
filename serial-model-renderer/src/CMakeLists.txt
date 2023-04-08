@@ -13,32 +13,18 @@ target_include_directories(srender PUBLIC
   ${FREETYPE_INCLUDE_DIRS}
   )
 
-if(NOT SMALL3D_OPENGL) # Vulkan
-  target_include_directories(srender PUBLIC ${Vulkan_INCLUDE_DIR})
-  target_link_libraries(srender PUBLIC
-    ${SMALL3D_LIBRARY}
-    ${GLFW_LIBRARIES}
-    ${Vulkan_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${VORBIS_LIBRARIES}
-    ${OGG_LIBRARIES}
-    ${PORTAUDIO_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    )
-else() # OpenGL
-  target_include_directories(srender PUBLIC ${OPENGL_INCLUDE_DIR})
-  target_link_libraries(srender PUBLIC
-    ${SMALL3D_LIBRARY}
-    ${GLEW_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${GLFW_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${VORBIS_LIBRARIES}
-    ${OGG_LIBRARIES}
-    ${PORTAUDIO_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    )
-endif()
+target_include_directories(srender PUBLIC ${OPENGL_INCLUDE_DIR})
+target_link_libraries(srender PUBLIC
+  ${SMALL3D_LIBRARY}
+  ${GLEW_LIBRARIES}
+  ${OPENGL_LIBRARIES}
+  ${GLFW_LIBRARIES}
+  ${PNG_LIBRARIES}
+  ${VORBIS_LIBRARIES}
+  ${OGG_LIBRARIES}
+  ${PORTAUDIO_LIBRARIES}
+  ${FREETYPE_LIBRARIES}
+  )
 
 if(UNIX OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" AND NOT
 	CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10))
