@@ -33,10 +33,10 @@ Menu::Menu(Renderer* renderer) {
 }
 
 void Menu::render() {
-  renderer->render(textRect1, FROGGER_TEXTURE_NAME, false);
+  renderer->render(textRect1, FROGGER_TEXTURE_NAME, 0, false);
 
-  renderer->render(textRect2, NOTE_TEXTURE_NAME, false);
+  renderer->render(textRect2, NOTE_TEXTURE_NAME, 0, false);
 
-  renderer->render(textRect3, PRESS_ENTER_TEXTURE_NAME, false);
+  renderer->render(textRect3, PRESS_ENTER_TEXTURE_NAME, 0, false);
 
 }

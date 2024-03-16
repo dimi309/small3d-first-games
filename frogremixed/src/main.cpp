@@ -9,11 +9,12 @@
 #include <small3d/Renderer.hpp>
 #include <small3d/SceneObject.hpp>
 #include <GLFW/glfw3.h>
-#include "Frog.hpp"
+#include "frog.hpp"
 #include "Menu.hpp"
 #include "Car.hpp"
 #include "Plank.hpp"
 #include <small3d/Sound.hpp>
+#include <small3d/WavefrontFile.hpp>
 
 #define MAX_Z -1.0f
 #define MIN_Z -24.0f
@@ -69,7 +70,10 @@ private:
 
   GLFWwindow* window;
   Renderer* renderer;
-  Frog frog;
+
+  
+
+  std::shared_ptr<Frog> frog;
   Plank plank[3];
   Car car[2];
   std::shared_ptr<Menu> menu;
@@ -97,26 +101,26 @@ private:
   void processInput() {
 
     if (gameState == PLAYING) {
-      if (upkey && frog.position.z > MIN_Z)
-        frog.position.z -= 0.1f;
-      if (downkey && frog.position.z < MAX_Z)
-        frog.position.z += 0.1f;
-      if (leftkey && frog.position.x > MIN_X)
-        frog.position.x -= 0.1f;
-      if (rightkey && frog.position.x < MAX_X)
-        frog.position.x += 0.1f;
+      if (upkey && frog->position.z > MIN_Z)
+        frog->position.z -= 0.1f;
+      if (downkey && frog->position.z < MAX_Z)
+        frog->position.z += 0.1f;
+      if (leftkey && frog->position.x > MIN_X)
+        frog->position.x -= 0.1f;
+      if (rightkey && frog->position.x < MAX_X)
+        frog->position.x += 0.1f;
 
-      if (!(upkey || downkey || leftkey || rightkey) && frog.isJumping()) {
-        frog.stopJumping();
+      if (!(upkey || downkey || leftkey || rightkey) && frog->isJumping()) {
+        frog->stopJumping();
       }
-      else if ((upkey || downkey || leftkey || rightkey) && !frog.isJumping()) {
-        frog.startJumping();
+      else if ((upkey || downkey || leftkey || rightkey) && !frog->isJumping()) {
+        frog->startJumping();
       }
 
-      if (upkey) frog.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-      if (downkey) frog.setRotation(glm::vec3(0.0f, 3.14f, 0.0f));
-      if (rightkey) frog.setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
-      if (leftkey) frog.setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+      if (upkey) frog->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+      if (downkey) frog->setRotation(glm::vec3(0.0f, 3.14f, 0.0f));
+      if (rightkey) frog->setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
+      if (leftkey) frog->setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
 
       if (esckey) {
         gameState = MENU;
@@ -126,8 +130,8 @@ private:
     else if (gameState == MENU) {
       if (enterkey) {
         gameState = PLAYING;
-        frog.position = glm::vec3(0.0f, GROUND_Y, -4.0f);
-        frog.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+        frog->position = glm::vec3(0.0f, GROUND_Y, -4.0f);
+        frog->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
       }
 
       if (esckey && timeInMainMenu > 1) quitting = true;
@@ -141,6 +145,15 @@ private:
     renderer->lightIntensity += 0.3f;
 
     menu = std::make_shared<Menu>(renderer);
+
+    std::vector<std::shared_ptr<small3d::Model>> frogAnim;
+    frogAnim.emplace_back(std::make_shared<Model>(WavefrontFile("resources/models/frog/frog_000001.obj")));
+    frogAnim.emplace_back(std::make_shared<Model>(WavefrontFile("resources/models/frog/frog_000002.obj")));
+    frogAnim.emplace_back(std::make_shared<Model>(WavefrontFile("resources/models/frog/frog_000003.obj")));
+    frogAnim.emplace_back(std::make_shared<Model>(WavefrontFile("resources/models/frog/frog_000004.obj")));
+    frogAnim.emplace_back(std::make_shared<Model>(WavefrontFile("resources/models/frog/frog_000005.obj")));
+
+    frog = std::make_shared<Frog>(frogAnim);
 
     pondSound = std::make_shared<Sound>("resources/sounds/0245.ogg");
     carSound = std::make_shared<Sound>("resources/sounds/0600.ogg");
@@ -204,8 +217,8 @@ private:
     if (car[1].position.x < MAX_X) car[1].move();
     else car[1].position.x = MIN_X;
 
-    if (car[0].containsCorners(frog) || car[1].containsCorners(frog)) {
-      frog.setRotation(glm::vec3(-1.57f, 0.0f, 0.0f));
+    if (car[0].containsCorners(*frog) || car[1].containsCorners(*frog)) {
+      frog->setRotation(glm::vec3(-1.57f, 0.0f, 0.0f));
       gameState = CRUSHED;
       ++losses;
       updateScoreMessage();
@@ -213,11 +226,11 @@ private:
       carSound->play();
     }
 
-    if (frog.position.z < -15.5f && frog.position.z > -18.5f &&
-      !plank[0].containsCorners(frog) &&
-      !plank[1].containsCorners(frog) &&
-      !plank[2].containsCorners(frog)) {
-      frog.position.y = GROUND_Y - 1.0f;
+    if (frog->position.z < -15.5f && frog->position.z > -18.5f &&
+      !plank[0].containsCorners(*frog) &&
+      !plank[1].containsCorners(*frog) &&
+      !plank[2].containsCorners(*frog)) {
+      frog->position.y = GROUND_Y - 1.0f;
       gameState = DROWNED;
       ++losses;
       updateScoreMessage();
@@ -225,10 +238,10 @@ private:
       pondSound->play();
     }
     else {
-      frog.position.y = GROUND_Y;
+      frog->position.y = GROUND_Y;
     }
 
-    if (frog.position.z < -20.0f) {
+    if (frog->position.z < -20.0f) {
       gameState = WON;
       ++wins;
       updateScoreMessage();
@@ -246,7 +259,7 @@ private:
     plank[2].move();
 
     for (uint32_t idx = 0; idx < 3; ++idx) {
-      if (plank[idx].containsCorners(frog)) frog.position.x += plank[idx].speed;
+      if (plank[idx].containsCorners(*frog)) frog->position.x += plank[idx].speed;
     }
 
   }
@@ -255,7 +268,7 @@ private:
     
 
     // Follow the frog ...
-    renderer->cameraPosition = frog.position;
+    renderer->cameraPosition = frog->position;
 
     // But be a bit higher...
     renderer->cameraPosition.y += 13.0f;
@@ -263,13 +276,13 @@ private:
     // ... and look down.
     renderer->setCameraRotation(glm::vec3(-1.0f, 0.0f, 0.0f));
 
-    // Limit left and right position while following the frog.
+    // Limit left and right position while following the frog->
     if (renderer->cameraPosition.x < MIN_CAM_X) renderer->cameraPosition.x =
       MIN_CAM_X;
     if (renderer->cameraPosition.x > MAX_CAM_X) renderer->cameraPosition.x =
       MAX_CAM_X;
 
-    // Also be a bit behind the frog.
+    // Also be a bit behind the frog->
     renderer->cameraPosition.z += 4.7f;
     if (renderer->cameraPosition.z > MAX_CAM_Z) renderer->cameraPosition.z =
       MAX_CAM_Z;
@@ -281,7 +294,7 @@ private:
     // Draw the ground
     renderer->render(terrainRect, "terrainTexture", true);
 
-    renderer->render(frog, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    renderer->render(*frog, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     plank[0].render(renderer);
     plank[1].render(renderer);
     plank[2].render(renderer);
@@ -317,7 +330,7 @@ private:
     renderer->setBackgroundColour(glm::vec4(0.0f, 0.3f, 1.0f, 1.0f));
     menu->render();
     if (wins > 0 || losses > 0) {
-      renderer->render(scoreRect, MSG_SCORE, false);
+      renderer->render(scoreRect, MSG_SCORE, 0, false);
     }
     renderer->swapBuffers();
   }
@@ -325,7 +338,7 @@ private:
 public:
 
   ~Game() {
-    renderer->clearBuffers(static_cast<SceneObject&>(frog));
+    renderer->clearBuffers(static_cast<SceneObject&>(*frog));
   }
 
   int run() {
@@ -352,7 +365,7 @@ public:
           break;
         case PLAYING:
           processWorld();
-          frog.animate();
+          frog->animate();
           renderGame();
           break;
         case CRUSHED:

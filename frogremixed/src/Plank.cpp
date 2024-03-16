@@ -7,9 +7,10 @@
  */
 
 #include "Plank.hpp"
+#include <small3d/WavefrontFile.hpp>
 
 Plank::Plank() :
-  SceneObject("plank", "resources/models/plank/plank.obj") {
+  SceneObject("plank", small3d::WavefrontFile("resources/models/plank/plank.obj")) {
   colour = glm::vec4(0.5f, 0.3f, 0.3f, 1.0f);
 }
 

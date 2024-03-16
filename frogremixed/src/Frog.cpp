@@ -8,7 +8,7 @@
 
 #include "Frog.hpp"
 
-Frog::Frog() : SceneObject("frog", "resources/models/frog/frog", 5){
+Frog::Frog(std::vector<std::shared_ptr<small3d::Model>> froganim) : SceneObject("frog", froganim, 5) {
   this->State = STILL;
   this->setFrameDelay(4);
 }

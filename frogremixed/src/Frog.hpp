@@ -7,6 +7,7 @@
  */
 
 #include <small3d/SceneObject.hpp>
+#include <small3d/Model.hpp>
 
 enum FrogState {STILL, JUMPING};
 
@@ -15,7 +16,7 @@ class Frog : public small3d::SceneObject {
   FrogState State;
   
  public:  
-  Frog();
+  Frog(std::vector<std::shared_ptr<small3d::Model>> froganim);
   ~Frog();
   void startJumping();
   void stopJumping();
