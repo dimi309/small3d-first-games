@@ -27,15 +27,16 @@
 #include <stdexcept>
 #include <cmath>
 #include "GameLogic.hpp"
+#include <small3d/GlbFile.hpp>
 
 using namespace small3d;
 
 namespace AvoidTheBug3D {
   
   GameLogic::GameLogic() :
-    goat("goat", "resources/models/goat.glb", "Cube", 2),
-    bug("bug", "resources/models/bug.glb", "Cube"),
-    tree("tree", "resources/models/tree.glb", "Cube", 3),
+    goat("goat", Model(GlbFile("resources/models/goat.glb"), "Cube"),2),
+    bug("bug", Model(GlbFile("resources/models/bug.glb"), "Cube")),
+    tree("tree", Model(GlbFile("resources/models/tree.glb"), "Cube"), 3),
     bahSound("resources/sounds/bah.ogg"){
     
     renderer = &Renderer::getInstance("Avoid the Bug 3D", 854, 480);
