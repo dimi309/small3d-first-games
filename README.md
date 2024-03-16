@@ -1,7 +1,5 @@
-[small3d](https://github.com/dimi309/small3d) sample games and demos
-====================================================================
-
-[![Build status](https://ci.appveyor.com/api/projects/status/l1lndxjhxmrfmouf?svg=true)](https://ci.appveyor.com/project/dimi309/small3d-samples)
+[small3d](https://github.com/dimi309/small3d) sample games 
+==========================================================
 
 # Building
 
