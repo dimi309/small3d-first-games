@@ -1,4 +1,4 @@
-[small3d](https://github.com/dimi309/small3d) sample games 
+[small3d](https://github.com/dimi309/small3d) first games 
 ==========================================================
 
 # Building
