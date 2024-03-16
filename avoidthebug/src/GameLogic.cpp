@@ -266,7 +266,7 @@ namespace AvoidTheBug3D {
     if (gameState == START_SCREEN) {
       
       renderer->render(startScreenRect, glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", false);
+        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
       
       if (seconds != 0) {
         

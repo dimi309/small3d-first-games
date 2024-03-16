@@ -27,6 +27,7 @@
 #include <memory>
 #include <stdexcept>
 #include "GameLogic.hpp"
+#include <small3d/GlbFile.hpp>
 
 
 using namespace small3d;
@@ -38,9 +39,8 @@ float sgn(float val) {
 namespace ChaseTheGoat3D {
 
   GameLogic::GameLogic() :
-    goat("goat", "resources/models/Goat/goatAnim",
-	 19, 1, 3U),
-    bug("bug", "resources/models/Bug/bugAnim", 9),
+    goat("goat", Model(GlbFile("resources/models/goat.glb"), "Cube"), 2),
+    bug("bug", Model(GlbFile("resources/models/bug.glb"), "Cube")),
     bahSound("resources/sounds/bah.ogg") {
 
     renderer = &Renderer::getInstance("Chase the Goat 3D", 0, 0, 1.2f);
@@ -60,8 +60,7 @@ namespace ChaseTheGoat3D {
     Image groundTexture("resources/images/grass.png");
     renderer->generateTexture("ground", groundTexture);
 
-    Image goatTexture("resources/models/Goat/goat.png");
-    renderer->generateTexture("goatTexture", goatTexture);
+    renderer->generateTexture("goatTexture", *goat.getModel().defaultTextureImage);
 
     bug.setFrameDelay(2);
 
@@ -231,7 +230,7 @@ namespace ChaseTheGoat3D {
     if (gameState == START_SCREEN) {
 
       renderer->render(startScreenRect, glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", false);
+        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
 
       if (seconds != 0) {
         renderer->render(msgRect, RESULT_TEXT_NAME, false);
