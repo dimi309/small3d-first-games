@@ -12,11 +12,6 @@ Build small3d for android. Then copy:
   small3d/build/lib to android/app/deps/lib
   small3d/build/shaders to android/app/src/main/assets/resources/shaders
 
-Optional (but I have had a phone crash when an app was deployed without these validation layers):
-Download the chronos validation layers binaries from https://github.com/KhronosGroup/Vulkan-ValidationLayers/releases.
-Decompress the archive and copy the directories it contains (arm64-v8a, armeabi-v7a, etc) to android/app/src/main/jniLibs
-
-
 If you receive an error that looks like this when opening the project in Android Studio:
 
 No version of NDK matched the requested version (A). Versions available locally: (B)
