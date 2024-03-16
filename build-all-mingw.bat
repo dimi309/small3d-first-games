@@ -30,15 +30,6 @@ cd ..\..
 if /I "%~1" == "debug" set CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=Debug
 if /I "%~1" == "release" set CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=Release
 
-REM For building serial-model-renderer a recent version 
-REM of gcc is needed, most likely >8. Otherwise the following
-REM error is produced:
-REM GCC error: no match for 'operator!=' (operand types are
-REM 'std::filesystem::__cxx11::path' and 'std::filesystem::__cxx11::path')
-REM || (__p.has_root_name() && __p.root_name() != root_name()))
-REM This is related to std::filesystem::directory_iterator, used in the program.
-REM Not building serial-model-renderer by default because appveyor user and
-REM older gcc version.
 for %%A in (avoidthebug, chasethegoat, frogremixed) do (
 cd %%A
 if exist deps rmdir /Q /S deps

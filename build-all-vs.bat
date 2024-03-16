@@ -26,7 +26,7 @@ if %errorlevel% neq 0 endlocal & exit /b %errorlevel%
 cd ..\..
 )
 
-for %%A in (avoidthebug, chasethegoat, frogremixed, serial-model-renderer) do (
+for %%A in (avoidthebug, chasethegoat, frogremixed) do (
 cd %%A
 if exist deps rmdir /Q /S deps
 mkdir deps

@@ -14,13 +14,9 @@ fi
 
 export CMAKE_DEFINITIONS=-DCMAKE_BUILD_TYPE=$1
 
-for sampledir in avoidthebug chasethegoat frogremixed serial-model-renderer
+for sampledir in avoidthebug chasethegoat frogremixed 
 do
 
-    if [ "$2" == "opengl" ] && [ "$sampledir" == "ball" ]; then
-	echo "Not building ball sample for OpenGL"
-	continue
-    fi
     cd $sampledir
     if [ -d "deps" ]; then rm -rf deps; fi
     mkdir deps
