@@ -14,7 +14,7 @@ Build by executing:
 After the build script has run, the executable for each game can be found in its
 `build/bin` subdirectory.
 
-## Prerequisites:
+# Prerequisites
 
 The following need to be installed, with the relevant environment variables and 
 tools accessible via the command line:
