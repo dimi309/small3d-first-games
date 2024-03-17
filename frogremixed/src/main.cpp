@@ -9,7 +9,7 @@
 #include <small3d/Renderer.hpp>
 #include <small3d/SceneObject.hpp>
 #include <GLFW/glfw3.h>
-#include "frog.hpp"
+#include "Frog.hpp"
 #include "Menu.hpp"
 #include "Car.hpp"
 #include "Plank.hpp"

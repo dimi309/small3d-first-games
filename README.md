@@ -3,6 +3,9 @@
 
 # Building
 
+This repository contains the small3d repository as a submodule.
+Remember to clone it with the `--recursive` flag.
+
 Build by executing:
  
 	- `build-all-mingw.bat` for a MinGW gcc build on Windows 
