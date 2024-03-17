@@ -3,8 +3,9 @@
 
 # Building
 
-This repository contains the small3d repository as a submodule.
-Remember to clone it with the `--recursive` flag.
+This repository contains the small3d repository as a submodule. Use 
+the `--recursive` flag when cloning, otherwise the small3d subdirectory 
+will remain empty on your drive.
 
 Build by executing:
  
