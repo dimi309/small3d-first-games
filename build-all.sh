@@ -30,7 +30,7 @@ do
     if [ -d "build" ]; then rm -rf build; fi
     mkdir build
     cd build
-    cmake .. $CMAKE_DEFINITIONS
+    cmake .. $CMAKE_DEFINITIONS -DCMAKE_CXX_STANDARD=17
     cmake --build .
     cd ../..
 done
