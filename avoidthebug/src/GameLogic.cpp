@@ -40,16 +40,16 @@ namespace AvoidTheBug3D {
     bahSound("resources/sounds/bah.ogg"){
     
     renderer = &Renderer::getInstance("Avoid the Bug 3D", 854, 480);
-    renderer->cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    renderer->cameraPosition = Vec3(0.0f, 0.0f, 0.0f);
 
-    renderer->createRectangle(startScreenRect, glm::vec3(-1.0f, 1.0f, 1.0f),
-      glm::vec3(1.0f, -1.0f, 1.0f));
+    renderer->createRectangle(startScreenRect, Vec3(-1.0f, 1.0f, 1.0f),
+      Vec3(1.0f, -1.0f, 1.0f));
     renderer->createRectangle(msgRect,
-      glm::vec3(-0.95f, -0.6f, -0.5f), glm::vec3(0.0f, -0.8f, -0.5f));
-    renderer->createRectangle(skyRect, glm::vec3(-1.0f, 1.0f, 1.0f),
-      glm::vec3(1.0f, -1.0f, 1.0f));
-    renderer->createRectangle(groundRect, glm::vec3(-25.0f, GROUND_Y, MIN_Z),
-      glm::vec3(25.0f, GROUND_Y, MAX_Z));
+      Vec3(-0.95f, -0.6f, -0.5f), Vec3(0.0f, -0.8f, -0.5f));
+    renderer->createRectangle(skyRect, Vec3(-1.0f, 1.0f, 1.0f),
+      Vec3(1.0f, -1.0f, 1.0f));
+    renderer->createRectangle(groundRect, Vec3(-25.0f, GROUND_Y, MIN_Z),
+      Vec3(25.0f, GROUND_Y, MAX_Z));
 
     renderer->generateTexture("goatTexture", *goat.getModel().defaultTextureImage);
 
@@ -58,8 +58,8 @@ namespace AvoidTheBug3D {
     Image startScreenTexture("resources/images/startScreen.png");
     renderer->generateTexture("startScreen", startScreenTexture);
 
-    tree.position = glm::vec3(2.6f, GROUND_Y, -8.0f);
-    tree.setRotation(glm::vec3(0.0f, 0.5f, 0.0f));
+    tree.position = Vec3(2.6f, GROUND_Y, -8.0f);
+    tree.setRotation(Vec3(0.0f, 0.5f, 0.0f));
     
     gameState = START_SCREEN;
     
@@ -76,11 +76,11 @@ namespace AvoidTheBug3D {
   }
   
   void GameLogic::initGame() {
-    goat.position = glm::vec3(-1.2f, GROUND_Y, -4.0f);
-    bug.position = glm::vec3(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
+    goat.position = Vec3(-1.2f, GROUND_Y, -4.0f);
+    bug.position = Vec3(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
     
-    goat.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-    bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    goat.setRotation(Vec3(0.0f, 0.0f, 0.0f));
+    bug.setRotation(Vec3(0.0f, 0.0f, 0.0f));
 
     bugState = FLYING_STRAIGHT;
     bugPreviousState = FLYING_STRAIGHT;
@@ -95,19 +95,19 @@ namespace AvoidTheBug3D {
     
     if (keyInput.left) {
       
-      goat.rotate(glm::vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
+      goat.rotate(Vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
       
       while (tree.containsCorners(goat)) {
-        goat.rotate(glm::vec3(0.0f, -GOAT_ROTATION_SPEED, 0.0f));
+        goat.rotate(Vec3(0.0f, -GOAT_ROTATION_SPEED, 0.0f));
       }
 
       goat.startAnimating();
       
     } else if (keyInput.right) {
-      goat.rotate(glm::vec3(0.0f, -GOAT_ROTATION_SPEED, 0.0f));
+      goat.rotate(Vec3(0.0f, -GOAT_ROTATION_SPEED, 0.0f));
 
       while (tree.containsCorners(goat)) {
-        goat.rotate(glm::vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
+        goat.rotate(Vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
       }
 
       goat.startAnimating();
@@ -177,12 +177,12 @@ namespace AvoidTheBug3D {
         seconds = static_cast<int>(glfwGetTime() - startSeconds);
         gameState = START_SCREEN;
         renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) + 
-          " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
+          " seconds", Vec3(0.5f, 1.0f, 0.0f));
       }
       
       if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
         bugState = DIVING_UP;
-        bug.rotate(glm::vec3(-2 * BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(Vec3(-2 * BUG_DIVE_TILT, 0.0f, 0.0f));
       }
     } else if (bugState == DIVING_UP) {
       if (goat.contains(bug.position)) {
@@ -190,12 +190,12 @@ namespace AvoidTheBug3D {
         seconds = static_cast<int>(glfwGetTime() - startSeconds);
         gameState = START_SCREEN;
         renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
-          " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
+          " seconds", Vec3(0.5f, 1.0f, 0.0f));
       }
       
       if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
         bugState = FLYING_STRAIGHT;
-        bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(Vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
       }
     } else {
       
@@ -207,7 +207,7 @@ namespace AvoidTheBug3D {
         }
       } else {
         bugState = DIVING_DOWN;
-        bug.rotate(glm::vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
+        bug.rotate(Vec3(BUG_DIVE_TILT, 0.0f, 0.0f));
       }
       bug.animate();
     }
@@ -215,7 +215,7 @@ namespace AvoidTheBug3D {
     // Bug state: represent
 
     if (bugState == TURNING) {
-      bug.rotate(glm::vec3(0.0f, BUG_ROTATION_SPEED, 0.0f));
+      bug.rotate(Vec3(0.0f, BUG_ROTATION_SPEED, 0.0f));
     }
     
     bug.position.x += bug.getOrientation().x * BUG_SPEED;
@@ -261,12 +261,12 @@ namespace AvoidTheBug3D {
   }
   
   void GameLogic::render() {
-    renderer->setBackgroundColour(glm::vec4(0.4f, 0.37f, 1.0f, 1.0f));
+    renderer->setBackgroundColour(Vec4(0.4f, 0.37f, 1.0f, 1.0f));
     
     if (gameState == START_SCREEN) {
       
-      renderer->render(startScreenRect, glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
+      renderer->render(startScreenRect, Vec3(0.0f, 0.0f, -1.0f),
+        Vec3(0.0f, 0.0f, 0.0f), Vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
       
       if (seconds != 0) {
         
@@ -277,11 +277,11 @@ namespace AvoidTheBug3D {
     } else {
       
       // Draw the ground
-      renderer->render(groundRect, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.5f, 0.0f, 1.0f));
+      renderer->render(groundRect, Vec3(0.0f, 0.0f, 0.0f),
+        Vec3(0.0f, 0.0f, 0.0f), Vec4(0.0f, 0.5f, 0.0f, 1.0f));
       
       renderer->render(goat, "goatTexture");
-      renderer->render(bug, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+      renderer->render(bug, Vec4(0.0f, 0.0f, 0.0f, 1.0f));
       renderer->render(tree, "treeTexture");
     }
     renderer->swapBuffers();

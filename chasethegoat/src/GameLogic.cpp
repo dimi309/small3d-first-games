@@ -45,14 +45,14 @@ namespace ChaseTheGoat3D {
 
     renderer = &Renderer::getInstance("Chase the Goat 3D", 0, 0, 1.2f);
 
-    renderer->createRectangle(startScreenRect, glm::vec3(-1.0f, 1.0f, 1.0f),
-      glm::vec3(1.0f, -1.0f, 1.0f));
+    renderer->createRectangle(startScreenRect, Vec3(-1.0f, 1.0f, 1.0f),
+      Vec3(1.0f, -1.0f, 1.0f));
     renderer->createRectangle(msgRect,
-      glm::vec3(-0.95f, -0.6f, -0.5f), glm::vec3(0.0f, -0.8f, -0.5f));
-    renderer->createRectangle(skyRect, glm::vec3(-1.0f, 1.0f, 1.0f),
-      glm::vec3(1.0f, -1.0f, 1.0f));
-    renderer->createRectangle(groundRect, glm::vec3(-25.0f, GROUND_Y, MIN_Z),
-      glm::vec3(25.0f, GROUND_Y, MAX_Z));
+      Vec3(-0.95f, -0.6f, -0.5f), Vec3(0.0f, -0.8f, -0.5f));
+    renderer->createRectangle(skyRect, Vec3(-1.0f, 1.0f, 1.0f),
+      Vec3(1.0f, -1.0f, 1.0f));
+    renderer->createRectangle(groundRect, Vec3(-25.0f, GROUND_Y, MIN_Z),
+      Vec3(25.0f, GROUND_Y, MAX_Z));
 
     Image startScreenTexture("resources/images/startScreen.png");
     renderer->generateTexture("startScreen", startScreenTexture);
@@ -79,10 +79,10 @@ namespace ChaseTheGoat3D {
   }
 
   void GameLogic::initGame() {
-    goat.position = glm::vec3(-1.2f, GROUND_Y, -4.0f);
-    bug.position = glm::vec3(3.6f, GROUND_Y + BUG_START_ALTITUDE, -5.0f);
-    bug.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-    goat.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    goat.position = Vec3(-1.2f, GROUND_Y, -4.0f);
+    bug.position = Vec3(3.6f, GROUND_Y + BUG_START_ALTITUDE, -5.0f);
+    bug.setRotation(Vec3(0.0f, 0.0f, 0.0f));
+    goat.setRotation(Vec3(0.0f, 0.0f, 0.0f));
 
     bug.startAnimating();
     goat.startAnimating();
@@ -110,7 +110,7 @@ namespace ChaseTheGoat3D {
       goatState = WALKING_STRAIGHT;
 
     if (goatState == TURNING) {
-      goat.rotate(glm::vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
+      goat.rotate(Vec3(0.0f, GOAT_ROTATION_SPEED, 0.0f));
 
     }
 
@@ -195,7 +195,7 @@ namespace ChaseTheGoat3D {
       bahSound.play();
       seconds = (glfwGetTime() - startSeconds);
       renderer->generateTexture(RESULT_TEXT_NAME, "Goat not bitten for " + std::to_string(seconds) +
-        " seconds", glm::vec3(0.5f, 1.0f, 0.0f));
+        " seconds", Vec3(0.5f, 1.0f, 0.0f));
     }
   }
 
@@ -225,12 +225,12 @@ namespace ChaseTheGoat3D {
   }
 
   void GameLogic::render() {
-    renderer->setBackgroundColour(glm::vec4(0.4f, 0.37f, 1.0f, 1.0f));
+    renderer->setBackgroundColour(Vec4(0.4f, 0.37f, 1.0f, 1.0f));
 
     if (gameState == START_SCREEN) {
 
-      renderer->render(startScreenRect, glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
+      renderer->render(startScreenRect, Vec3(0.0f, 0.0f, -1.0f),
+        Vec3(0.0f, 0.0f, 0.0f), Vec4(0.0f, 0.0f, 0.0f, 0.0f), "startScreen", 0, false);
 
       if (seconds != 0) {
         renderer->render(msgRect, RESULT_TEXT_NAME, false);
@@ -245,7 +245,7 @@ namespace ChaseTheGoat3D {
 
       renderer->render(goat, "goatTexture");
       
-      renderer->render(bug, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+      renderer->render(bug, Vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
     }
     renderer->swapBuffers();

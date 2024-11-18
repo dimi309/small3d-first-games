@@ -117,10 +117,10 @@ private:
         frog->startJumping();
       }
 
-      if (upkey) frog->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-      if (downkey) frog->setRotation(glm::vec3(0.0f, 3.14f, 0.0f));
-      if (rightkey) frog->setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
-      if (leftkey) frog->setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+      if (upkey) frog->setRotation(Vec3(0.0f, 0.0f, 0.0f));
+      if (downkey) frog->setRotation(Vec3(0.0f, 3.14f, 0.0f));
+      if (rightkey) frog->setRotation(Vec3(0.0f, -1.57f, 0.0f));
+      if (leftkey) frog->setRotation(Vec3(0.0f, 1.57f, 0.0f));
 
       if (esckey) {
         gameState = MENU;
@@ -130,8 +130,8 @@ private:
     else if (gameState == MENU) {
       if (enterkey) {
         gameState = PLAYING;
-        frog->position = glm::vec3(0.0f, GROUND_Y, -4.0f);
-        frog->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+        frog->position = Vec3(0.0f, GROUND_Y, -4.0f);
+        frog->setRotation(Vec3(0.0f, 0.0f, 0.0f));
       }
 
       if (esckey && timeInMainMenu > 1) quitting = true;
@@ -166,47 +166,47 @@ private:
 
     glfwSetKeyCallback(window, keyCallback);
 
-    plank[0].position = glm::vec3(0.0f, -1.02f, -16.0f);
-    plank[0].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+    plank[0].position = Vec3(0.0f, -1.02f, -16.0f);
+    plank[0].setRotation(Vec3(0.0f, 1.57f, 0.0f));
     plank[0].speed = 0.2f;
 
-    plank[1].position = glm::vec3(0.0f, -1.02f, -17.0f);
-    plank[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+    plank[1].position = Vec3(0.0f, -1.02f, -17.0f);
+    plank[1].setRotation(Vec3(0.0f, 1.57f, 0.0f));
     plank[1].speed = 0.1f;
 
-    plank[2].position = glm::vec3(0.0f, -1.02f, -18.0f);
-    plank[2].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+    plank[2].position = Vec3(0.0f, -1.02f, -18.0f);
+    plank[2].setRotation(Vec3(0.0f, 1.57f, 0.0f));
     plank[2].speed = 0.15f;
 
-    car[0].position = glm::vec3(0.0f, -0.5f, -7.5f);
-    car[0].setRotation(glm::vec3(0.0f, -1.57f, 0.0f));
+    car[0].position = Vec3(0.0f, -0.5f, -7.5f);
+    car[0].setRotation(Vec3(0.0f, -1.57f, 0.0f));
     car[0].speed = -0.35f;
 
-    car[1].position = glm::vec3(5.0f, -0.5f, -9.5f);
-    car[1].setRotation(glm::vec3(0.0f, 1.57f, 0.0f));
+    car[1].position = Vec3(5.0f, -0.5f, -9.5f);
+    car[1].setRotation(Vec3(0.0f, 1.57f, 0.0f));
     car[1].speed = 0.75f;
 
-    renderer->createRectangle(skyRect, glm::vec3(-1.0f, 1.0f, 1.0f),
-      glm::vec3(1.0f, -1.0f, 1.0f));
+    renderer->createRectangle(skyRect, Vec3(-1.0f, 1.0f, 1.0f),
+      Vec3(1.0f, -1.0f, 1.0f));
 
-    renderer->createRectangle(terrainRect, glm::vec3(-35.0f, GROUND_Y, MIN_Z),
-      glm::vec3(35.0f, GROUND_Y, MAX_Z));
+    renderer->createRectangle(terrainRect, Vec3(-35.0f, GROUND_Y, MIN_Z),
+      Vec3(35.0f, GROUND_Y, MAX_Z));
 
-    renderer->createRectangle(msgRect, glm::vec3(-0.4f, 0.8f, -1.0f),
-      glm::vec3(0.4f, 0.4f, -1.0f));
+    renderer->createRectangle(msgRect, Vec3(-0.4f, 0.8f, -1.0f),
+      Vec3(0.4f, 0.4f, -1.0f));
 
-    renderer->createRectangle(msgDrownedRect, glm::vec3(-0.8f, 0.8f, -1.0f),
-      glm::vec3(0.8f, 0.4f, -1.0f));
+    renderer->createRectangle(msgDrownedRect, Vec3(-0.8f, 0.8f, -1.0f),
+      Vec3(0.8f, 0.4f, -1.0f));
 
-    renderer->createRectangle(scoreRect, glm::vec3(-0.4f, -0.2f, 1.0f),
-      glm::vec3(0.4f, -0.4f, 1.0f));
+    renderer->createRectangle(scoreRect, Vec3(-0.4f, -0.2f, 1.0f),
+      Vec3(0.4f, -0.4f, 1.0f));
 
     renderer->generateTexture(MSG_CRUSHED,
-      "YOU'VE BEEN CRUSHED", glm::vec3(0.0f, 1.0f, 0.0f));
+      "YOU'VE BEEN CRUSHED", Vec3(0.0f, 1.0f, 0.0f));
     renderer->generateTexture(MSG_DROWNED,
-      "YOU'VE HAVE DROWNED EVEN THOUGH YOU ARE A FROG", glm::vec3(0.0f, 1.0f, 0.0f));
+      "YOU'VE HAVE DROWNED EVEN THOUGH YOU ARE A FROG", Vec3(0.0f, 1.0f, 0.0f));
     renderer->generateTexture(MSG_WON,
-      "YOU HAVE WON!!!", glm::vec3(1.0f, 1.0f, 0.0f));
+      "YOU HAVE WON!!!", Vec3(1.0f, 1.0f, 0.0f));
 
   }
 
@@ -218,7 +218,7 @@ private:
     else car[1].position.x = MIN_X;
 
     if (car[0].containsCorners(*frog) || car[1].containsCorners(*frog)) {
-      frog->setRotation(glm::vec3(-1.57f, 0.0f, 0.0f));
+      frog->setRotation(Vec3(-1.57f, 0.0f, 0.0f));
       gameState = CRUSHED;
       ++losses;
       updateScoreMessage();
@@ -274,7 +274,7 @@ private:
     renderer->cameraPosition.y += 13.0f;
 
     // ... and look down.
-    renderer->setCameraRotation(glm::vec3(-1.0f, 0.0f, 0.0f));
+    renderer->setCameraRotation(Vec3(-1.0f, 0.0f, 0.0f));
 
     // Limit left and right position while following the frog->
     if (renderer->cameraPosition.x < MIN_CAM_X) renderer->cameraPosition.x =
@@ -288,13 +288,13 @@ private:
       MAX_CAM_Z;
 
     // Draw the sky
-    renderer->render(skyRect, glm::vec4(0.4f, 0.37f, 1.0f, 1.0f), false);
+    renderer->render(skyRect, Vec4(0.4f, 0.37f, 1.0f, 1.0f), false);
 
 
     // Draw the ground
     renderer->render(terrainRect, "terrainTexture", true);
 
-    renderer->render(*frog, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    renderer->render(*frog, Vec4(0.0f, 1.0f, 0.0f, 1.0f));
     plank[0].render(renderer);
     plank[1].render(renderer);
     plank[2].render(renderer);
@@ -323,11 +323,11 @@ private:
     winslosses += " Losses: ";
     winslosses += std::to_string(losses);
     renderer->generateTexture(MSG_SCORE, winslosses,  
-      glm::vec3(1.0f, 1.0f, 1.0f));
+      Vec3(1.0f, 1.0f, 1.0f));
   }
 
   void renderMenu() {
-    renderer->setBackgroundColour(glm::vec4(0.0f, 0.3f, 1.0f, 1.0f));
+    renderer->setBackgroundColour(Vec4(0.0f, 0.3f, 1.0f, 1.0f));
     menu->render();
     if (wins > 0 || losses > 0) {
       renderer->render(scoreRect, MSG_SCORE, 0, false);

@@ -14,7 +14,7 @@ using namespace small3d;
 
 class Plank : public SceneObject {
 private:
-  glm::vec4 colour;
+  Vec4 colour;
   Renderer *renderer = nullptr;
 public:
   Plank();

@@ -15,7 +15,7 @@ using namespace small3d;
 class Car : public SceneObject {
 private:
   Model wheel;
-  glm::vec4 colour;
+  Vec4 colour;
   Renderer *renderer = nullptr;
 public:
   Car();
