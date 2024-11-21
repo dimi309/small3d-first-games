@@ -10,6 +10,7 @@
 #define MIN_Z -24.0f
 
 #define GROUND_Y -1.0f
+#define CAMERA_Z -0.5f
 
 #define BUG_ROTATION_SPEED 0.12f
 #define BUG_DIVE_TILT -0.8f
@@ -40,12 +41,12 @@ namespace AvoidTheBug3D {
     bahSound("resources/sounds/bah.ogg"){
     
     renderer = &Renderer::getInstance("Avoid the Bug 3D", 854, 480);
-    renderer->cameraPosition = Vec3(0.0f, 0.0f, 0.0f);
+    renderer->cameraPosition = Vec3(0.0f, 0.0f, CAMERA_Z);
 
     renderer->createRectangle(startScreenRect, Vec3(-1.0f, 1.0f, 1.0f),
       Vec3(1.0f, -1.0f, 1.0f));
     renderer->createRectangle(msgRect,
-      Vec3(-0.95f, -0.6f, -0.5f), Vec3(0.0f, -0.8f, -0.5f));
+      Vec3(-0.95f, -0.6f, 0.0f), Vec3(0.0f, -0.8f, 0.0f));
     renderer->createRectangle(skyRect, Vec3(-1.0f, 1.0f, 1.0f),
       Vec3(1.0f, -1.0f, 1.0f));
     renderer->createRectangle(groundRect, Vec3(-25.0f, GROUND_Y, MIN_Z),
@@ -270,7 +271,7 @@ namespace AvoidTheBug3D {
       
       if (seconds != 0) {
         
-        renderer->render(msgRect, RESULT_TEXT_NAME, false);
+        renderer->render(msgRect, RESULT_TEXT_NAME, 0, false);
         
       }
       

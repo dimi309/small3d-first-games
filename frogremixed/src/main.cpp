@@ -18,7 +18,7 @@
 
 #define MAX_Z -1.0f
 #define MIN_Z -24.0f
-#define MAX_CAM_Z -3.0f
+#define MAX_CAM_Z -4.0f
 #define GROUND_Y -1.0f
 #define MAX_X 17.0f
 #define MIN_X -17.0f
