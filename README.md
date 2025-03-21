@@ -11,7 +11,7 @@ Build by executing:
  
 	- `build-all-mingw.bat` for a MinGW gcc build on Windows 
 	- `build-all-vs.bat` for a Visual Studio build on Windows
-	- `build-all.sh` for gcc/llvm builds on MacOS and Linux
+	- `build-all.sh` for gcc/llvm builds on Linux
 	
 # Running
 
